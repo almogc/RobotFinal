@@ -23,8 +23,6 @@ int main() {
 			pp.SetSpeed(0.0, 0.3);
 		else
 			pp.SetSpeed(0.8, 0.0);
-
-		try try
 	}
 	return 0;
 
