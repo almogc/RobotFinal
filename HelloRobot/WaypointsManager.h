@@ -1,0 +1,7 @@
+/*
+ * WaypointsManager.h
+ */
+
+class WaypointsManager{
+
+};

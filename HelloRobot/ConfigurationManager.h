@@ -1,0 +1,7 @@
+/*
+ * ConfigurationManager.h
+ */
+
+class ConfigurationManager{
+
+};

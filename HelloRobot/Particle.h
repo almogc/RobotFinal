@@ -1,0 +1,7 @@
+/*
+ * Particle.h
+ */
+
+class Particle{
+
+};
