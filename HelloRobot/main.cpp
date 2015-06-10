@@ -79,7 +79,7 @@ void NewBlow(int xPos,int yPos,int nCount)
 		{
 			if(CheckPoint(nCol,nRow) && GetPositionAsMatrix(nCol, nRow) == BLANK)
 			{
-				SetPositionAsMatrix(nCol, nRow, 1);
+				SetPositionAsMatrix(nCol, nRow, 6);
 			}
 
 		}
@@ -92,7 +92,7 @@ void NewBlow(int xPos,int yPos,int nCount)
 int main() {
 
 
-	const char* filename = "roboticLabMap.png";
+	const char* filename = "Maps/roboticLabMap.png";
 		loadImage(filename);
 
 		cout << "width: " << width << ", height: " << height << endl;
