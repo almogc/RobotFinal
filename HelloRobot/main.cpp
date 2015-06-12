@@ -6,6 +6,8 @@
  */
 
 #include "lodepng.h"
+#include "Globals.h"
+#include "Map.h"
 #include <iostream>
 #include <libplayerc++/playerc++.h>
 #include <fstream>
@@ -19,7 +21,7 @@ unsigned width, height;
 
 //Example 1
 //Decode from disk to raw pixels with a single function call
-void loadImage(const char* filename)
+void lodeImage(const char* filename)
 {
   //decode
   unsigned error = lodepng::decode(image, width, height, filename);
@@ -90,22 +92,11 @@ void NewBlow(int xPos,int yPos,int nCount)
 
 void ReadParametersFile()
 {
-	struct StartLocationType {
-	  int Xpos;
-	  int Ypos;
-	  int Yaw;;
-	} ;
-	struct GoalLocationType {
-	  int Xpos;
-	  int Ypos;
-	} ;
-
-	StartLocationType StartLocation;
-	GoalLocationType Goal;
-	string FileContent, FileVariable, mapLocation;
-	double MapResolutionCM, GridResolutionCM , RobotSize;
+	string FileContent, FileVariable;
 	ifstream infile;
 	size_t Pos;
+	Globals *pntGlobals;
+	pntGlobals = pntGlobals->getInstance();
 
 	infile.open ("parameters.txt");
 	if (infile.is_open()) {
@@ -116,47 +107,47 @@ void ReadParametersFile()
 			FileVariable = FileContent.substr(0,Pos);
 			if (!FileVariable.compare("map"))
 			{
-				mapLocation = FileContent.substr(Pos+2,FileContent.length());
-				cout << mapLocation << endl;
+				pntGlobals->mapLocation = FileContent.substr(Pos+2,FileContent.length());
+				cout << pntGlobals->mapLocation << endl;
 			}
 			else if (!FileVariable.compare("startLocation"))
 			{
 				FileContent = FileContent.substr(Pos+2,FileContent.length());
 
 				Pos = FileContent.find(" ");
-				StartLocation.Xpos = atoi(FileContent.substr(0,Pos).c_str());
+				pntGlobals->StartLocation.Xpos = atoi(FileContent.substr(0,Pos).c_str());
 				FileContent = FileContent.substr(Pos+1,FileContent.length());
 
 				Pos = FileContent.find(" ");
-				StartLocation.Ypos = atoi(FileContent.substr(0,Pos).c_str());
+				pntGlobals->StartLocation.Ypos = atoi(FileContent.substr(0,Pos).c_str());
 				FileContent = FileContent.substr(Pos+1,FileContent.length());
 
-				StartLocation.Yaw = atoi(FileContent.substr(0,Pos-1).c_str());
+				pntGlobals->StartLocation.Yaw = atoi(FileContent.substr(0,Pos-1).c_str());
 			}
 			else if (!FileVariable.compare("goal"))
 			{
 				FileContent = FileContent.substr(Pos+2,FileContent.length());
 
 				Pos = FileContent.find(" ");
-				Goal.Xpos = atoi(FileContent.substr(0,Pos).c_str());
+				pntGlobals->Goal.Xpos = atoi(FileContent.substr(0,Pos).c_str());
 				FileContent = FileContent.substr(Pos+1,FileContent.length());
 
-				Goal.Ypos = atoi(FileContent.substr(0,Pos).c_str());
+				pntGlobals->Goal.Ypos = atoi(FileContent.substr(0,Pos).c_str());
 			}
 			else if (!FileVariable.compare("robotSize"))
 			{
 				FileContent = FileContent.substr(Pos+2,FileContent.length());
 				Pos = FileContent.find(" ");
 
-				RobotSize = atof(FileContent.substr(0,Pos).c_str());
+				pntGlobals->RobotSize = atof(FileContent.substr(0,Pos).c_str());
 			}
 			else if (!FileVariable.compare("MapResolutionCM"))
 			{
-				MapResolutionCM  = atof(FileContent.substr(Pos+2,FileContent.length()-1).c_str());
+				pntGlobals->MapResolutionCM  = atof(FileContent.substr(Pos+2,FileContent.length()-1).c_str());
 			}
 			else if (!FileVariable.compare("GridResolutionCM"))
 			{
-				GridResolutionCM  = atof(FileContent.substr(Pos+2,FileContent.length()-1).c_str());
+				pntGlobals->GridResolutionCM  = atof(FileContent.substr(Pos+2,FileContent.length()-1).c_str());
 			}
         }
 	}
@@ -167,9 +158,13 @@ void ReadParametersFile()
 
 int main() {
 
+
+
+
+
 	ReadParametersFile();
 	const char* filename = "Maps/roboticLabMap.png";
-		loadImage(filename);
+		lodeImage(filename);
 
 		cout << "width: " << width << ", height: " << height << endl;
 		for (int i = 0; i < 4; i++)
@@ -177,6 +172,12 @@ int main() {
 			cout << (int)image[i] << " ";
 		}
 		cout << endl;
+
+
+
+
+		Map a;
+		a.MakeGridFromImage();
 
 		//  Change the first line to black
 		for (unsigned int nRow = 0; nRow < height  - 4; nRow+=1)
