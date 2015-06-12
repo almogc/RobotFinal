@@ -1,5 +1,5 @@
 /*
- * main.cpp
+ * main.c  pp
  *
  *  Created on: Jan 10, 2015
  *      Author: colman
@@ -8,6 +8,7 @@
 #include "lodepng.h"
 #include <iostream>
 #include <libplayerc++/playerc++.h>
+#include <fstream>
 
 using namespace PlayerCc;
 
@@ -149,17 +150,17 @@ void ReadParametersFile()
 				Pos = FileContent.find(" ");
 				temp1 = FileContent.substr(0,Pos);
 
-				//RobotSize  = std::stoi(temp1.c_str());
+				RobotSize = atoi(temp1.c_str());
 			}
 			else if (!FileVariable.compare("MapResolutionCM"))
 			{
 				temp2 = FileContent.substr(Pos+2,FileContent.length()-1);
-				//MapResolutionCM  = atoi(temp2.c_str());
+				MapResolutionCM  = atoi(temp2.c_str());
 			}
 			else if (!FileVariable.compare("GridResolutionCM"))
 			{
 				temp3 = FileContent.substr(Pos+2,FileContent.length()-1);
-				//GridResolutionCM  = atoi(temp3.c_str());
+				GridResolutionCM  = atoi(temp3.c_str());
 			}
         }
 	}
@@ -169,7 +170,6 @@ void ReadParametersFile()
 
 
 int main() {
-
 
 	const char* filename = "Maps/roboticLabMap.png";
 		loadImage(filename);
