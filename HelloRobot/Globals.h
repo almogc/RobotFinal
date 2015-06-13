@@ -1,4 +1,6 @@
+#include <string>
 using namespace std;
+
 
 struct StartLocationType {
 		  int Xpos;
@@ -9,6 +11,10 @@ struct StartLocationType {
 		  int Xpos;
 		  int Ypos;
 		} ;
+
+const int BLANK = 255;
+const int FULL = 0;
+const int NEW_FULL = 1;
 
 class Globals
 {
@@ -26,15 +32,7 @@ public:
 	string  mapLocation;
 };
 
-Globals*  Globals::myGlobal=NULL;
-Globals* Globals::getInstance()
-{
-	if(!myGlobal){
 
-				myGlobal=new Globals();
-			}
-			return myGlobal;
-}
 
 
 
