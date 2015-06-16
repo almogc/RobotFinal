@@ -3,4 +3,85 @@
  */
 
 # include "ConfigurationManager.h"
+#include <iostream>
+#include <fstream>
 
+
+ConfigurationMGR*  ConfigurationMGR::configMgr = 0;
+ConfigurationMGR* ConfigurationMGR::getInstance()
+{
+	if (!configMgr){
+
+		configMgr = new ConfigurationMGR();
+	}
+	return configMgr;
+}
+
+ConfigurationMGR::ConfigurationMGR()
+{
+	ReadParametersFile();
+}
+
+void ConfigurationMGR::ReadParametersFile()
+{
+	string FileContent, FileVariable;
+	ifstream infile;
+	size_t Pos;
+
+
+	infile.open("parameters.txt");
+	if (infile.is_open()) {
+		while (!infile.eof())
+		{
+			getline(infile, FileContent);
+			Pos = FileContent.find(": ");
+			FileVariable = FileContent.substr(0, Pos);
+			if (!FileVariable.compare("map"))
+			{
+				mapLocation = FileContent.substr(Pos + 2, FileContent.length());
+				cout << mapLocation << endl;
+			}
+			else if (!FileVariable.compare("startLocation"))
+			{
+				FileContent = FileContent.substr(Pos + 2, FileContent.length());
+
+				Pos = FileContent.find(" ");
+				StartLocation.Xpos = atoi(FileContent.substr(0, Pos).c_str());
+				FileContent = FileContent.substr(Pos + 1, FileContent.length());
+
+				Pos = FileContent.find(" ");
+				StartLocation.Ypos = atoi(FileContent.substr(0, Pos).c_str());
+				FileContent = FileContent.substr(Pos + 1, FileContent.length());
+
+				StartLocation.Yaw = atoi(FileContent.substr(0, Pos - 1).c_str());
+			}
+			else if (!FileVariable.compare("goal"))
+			{
+				FileContent = FileContent.substr(Pos + 2, FileContent.length());
+
+				Pos = FileContent.find(" ");
+				Goal.Xpos = atoi(FileContent.substr(0, Pos).c_str());
+				FileContent = FileContent.substr(Pos + 1, FileContent.length());
+
+				Goal.Ypos = atoi(FileContent.substr(0, Pos).c_str());
+			}
+			else if (!FileVariable.compare("robotSize"))
+			{
+				FileContent = FileContent.substr(Pos + 2, FileContent.length());
+				Pos = FileContent.find(" ");
+
+				RobotSize = atof(FileContent.substr(0, Pos).c_str());
+			}
+			else if (!FileVariable.compare("MapResolutionCM"))
+			{
+				MapResolutionCM = atof(FileContent.substr(Pos + 2, FileContent.length() - 1).c_str());
+			}
+			else if (!FileVariable.compare("GridResolutionCM"))
+			{
+				GridResolutionCM = atof(FileContent.substr(Pos + 2, FileContent.length() - 1).c_str());
+			}
+		}
+	}
+	infile.close();
+
+}

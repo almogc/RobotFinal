@@ -3,7 +3,7 @@
  */
 
 #include "Map.h"
-#include "Globals.h"
+#include "ConfigurationManager.h"
 #include "lodepng.h"
 #include <iostream>
 #include <fstream>
@@ -88,7 +88,6 @@ bool Map::CheckCell(int nRow, int nCol, int nCellsToCheck)
 	nCol *= nCellsToCheck;
 	int Result;
 
-	// Check if cell in the map is black or white.
 	for (int nRowOfset = 0; nRowOfset < nCellsToCheck; nRowOfset += 1)
 	{
 		for (int nColOfset = 0; nColOfset < nCellsToCheck; nColOfset += 1)
@@ -119,17 +118,16 @@ bool Map::CheckCell(int nRow, int nCol, int nCellsToCheck)
 
 void Map::MakeGridFromImage(const char* filename)
 {
-	Globals *pntGlobals;
+	ConfigurationMGR *pntConfiguration;
 	int CellsToBlow;
 
-	pntGlobals = pntGlobals->getInstance();
+	pntConfiguration = pntConfiguration->getInstance();
 
 	lodeImage(filename);
 
-	// Checks how much cells needs to be blow, depend of the size of the robot and the map resolution of course :)
-	CellsToBlow = (pntGlobals->RobotSize / 2) / (pntGlobals->MapResolutionCM);
+	CellsToBlow = (pntConfiguration->RobotSize / 2) / (pntConfiguration->MapResolutionCM);
 
-	// Running over the matrix and do blow foreach black cell
+
 	for (unsigned int nRow = 0; nRow < nHeight; nRow += 1)
 	{
 		for (unsigned int nCol = 0; nCol < nWidth; nCol += 1)
@@ -146,35 +144,34 @@ void Map::MakeGridFromImage(const char* filename)
 	saveImage(newfile, imageArray, nWidth, nHeight);
 	int nMapHight, nMapWidth;
 
-	// Checks how much pixels in the first vector equals to one gris cell
-	PixelInGrid = pntGlobals->GridResolutionCM / pntGlobals->MapResolutionCM;
+
+	PixelInGrid = pntConfiguration->GridResolutionCM / pntConfiguration->MapResolutionCM;
 
 	ofstream myFile;
 	system("rm map.txt");
 	myFile.open("map.txt");
 
-	// Calculating the size of the grid
 	nMapHight = nHeight / PixelInGrid;
 	nMapWidth = nWidth / PixelInGrid;
 
-	// Creating the grid
 	bool** robotMap = new bool*[nMapHight];
 	for (int i = 0; i < nMapHight; ++i)
 		robotMap[i] = new bool[nMapWidth];
 
 
-	// Fills the grid using the first PNG array
-	for (int nRow = 0; nRow < nMapHight; nRow +=1)
-	{
-		for (int nCol = 0; nCol < nMapWidth; nCol += 1)
+		for (int nRow = 0; nRow < nMapHight; nRow +=1)
 		{
-			robotMap[nRow][nCol] = CheckCell(nRow,nCol,PixelInGrid);
-			myFile << robotMap[nRow][nCol];
-		}
-		myFile << '\n';
+			for (int nCol = 0; nCol < nMapWidth; nCol += 1)
+			{
+				robotMap[nRow][nCol] = CheckCell(nRow,nCol,PixelInGrid);
+				myFile << robotMap[nRow][nCol];
+			}
+			myFile << '\n';
 
-	}
-	myFile.close();
+		}
+		myFile.close();
+
+
 }
 
 
