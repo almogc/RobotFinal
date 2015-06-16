@@ -116,12 +116,13 @@ bool Map::CheckCell(int nRow, int nCol, int nCellsToCheck)
 
 }
 
-void Map::MakeGridFromImage(const char* filename)
+void Map::MakeGridFromImage(const char* filename, bool **GridMap, int *nGridWidth, int *nGridHight)
 {
 	ConfigurationMGR *pntConfiguration;
 	int CellsToBlow;
 
 	pntConfiguration = pntConfiguration->getInstance();
+
 
 	lodeImage(filename);
 
@@ -154,23 +155,25 @@ void Map::MakeGridFromImage(const char* filename)
 	nMapHight = nHeight / PixelInGrid;
 	nMapWidth = nWidth / PixelInGrid;
 
-	bool** robotMap = new bool*[nMapHight];
+	GridMap = new bool*[nMapHight];
 	for (int i = 0; i < nMapHight; ++i)
-		robotMap[i] = new bool[nMapWidth];
+		GridMap[i] = new bool[nMapWidth];
 
 
 		for (int nRow = 0; nRow < nMapHight; nRow +=1)
 		{
 			for (int nCol = 0; nCol < nMapWidth; nCol += 1)
 			{
-				robotMap[nRow][nCol] = CheckCell(nRow,nCol,PixelInGrid);
-				myFile << robotMap[nRow][nCol];
+				GridMap[nRow][nCol] = CheckCell(nRow,nCol,PixelInGrid);
+				myFile << GridMap[nRow][nCol];
 			}
 			myFile << '\n';
 
 		}
 		myFile.close();
 
+		*nGridWidth = nMapWidth;
+		*nGridHight = nMapHight;
 
 }
 

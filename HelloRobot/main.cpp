@@ -22,12 +22,15 @@ unsigned width, height;
 
 int main() {
 	const char* filename = "Maps/roboticLabMap.png";
-
+	bool** GridMap;
+	int nGridWidth, nGridHight;
 
 	Map map;
-	map.MakeGridFromImage(filename);
+	map.MakeGridFromImage(filename,GridMap,&nGridWidth, &nGridHight);
 
-
+	cout << "Grid Width: " << nGridWidth << endl;
+	cout << "Grid Hight: " << nGridHight << endl;
+	cout << "place [5][6] is " << GridMap[5][6];
 
 
 
