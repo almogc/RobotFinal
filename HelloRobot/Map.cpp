@@ -116,14 +116,14 @@ bool Map::CheckCell(int nRow, int nCol, int nCellsToCheck)
 
 }
 
-void Map::MakeGridFromImage(const char* filename, bool **GridMap, int *nGridWidth, int *nGridHight)
+void Map::MakeGridFromImage(bool **GridMap, int *nGridWidth, int *nGridHight)
 {
 	ConfigurationMGR *pntConfiguration;
 	int CellsToBlow;
 
 	pntConfiguration = pntConfiguration->getInstance();
 
-	lodeImage(filename);
+	lodeImage(pntConfiguration->mapLocation.c_str());
 
 	CellsToBlow = (pntConfiguration->RobotSize / 2) / (pntConfiguration->MapResolutionCM);
 

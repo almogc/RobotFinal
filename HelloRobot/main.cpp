@@ -15,12 +15,11 @@ using namespace std;
 
 
 int main() {
-	const char* filename = "Maps/roboticLabMap.png";
 	bool** GridMap;
 	int nGridWidth, nGridHight;
 
 	Map map;
-	map.MakeGridFromImage(filename,GridMap,&nGridWidth, &nGridHight);
+	map.MakeGridFromImage(GridMap,&nGridWidth, &nGridHight);
 
 	cout << "Grid Width: " << nGridWidth << endl;
 	cout << "Grid Hight: " << nGridHight << endl;

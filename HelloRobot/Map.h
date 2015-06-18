@@ -4,7 +4,7 @@
 
 class Map {
 public:
-	void MakeGridFromImage(const char* filename, bool **GridMap, int *nGridWidth, int *nGridHight);
+	void MakeGridFromImage(bool **GridMap, int *nGridWidth, int *nGridHight);
 
 private:
 	bool CheckCell(int nRow, int nCol, int nCellsToCheck);
