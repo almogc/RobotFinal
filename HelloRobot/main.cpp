@@ -5,18 +5,12 @@
  *      Author: colman
  */
 
-#include "lodepng.h"
 #include "Map.h"
 #include <iostream>
 #include <fstream>
 
 
 using namespace std;
-
-std::vector<unsigned char> image; //the raw pixels
-unsigned width, height;
-
-
 
 
 

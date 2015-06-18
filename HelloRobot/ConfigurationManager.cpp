@@ -81,7 +81,20 @@ void ConfigurationMGR::ReadParametersFile()
 				GridResolutionCM = atof(FileContent.substr(Pos + 2, FileContent.length() - 1).c_str());
 			}
 		}
+		infile.close();
 	}
-	infile.close();
+	else
+	{
+		MapResolutionCM = 2.5;
+		GridResolutionCM = 10;
+		RobotSize = 30;
+		StartLocation.Xpos = 362;
+		StartLocation.Ypos = 305;
+		StartLocation.Yaw = 20;
+		Goal.Xpos = 169;
+		Goal.Ypos = 138;
+		mapLocation = "~/Desktop/roboticLabMap.png";
+	}
+
 
 }

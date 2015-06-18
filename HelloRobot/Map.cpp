@@ -123,12 +123,11 @@ void Map::MakeGridFromImage(const char* filename, bool **GridMap, int *nGridWidt
 
 	pntConfiguration = pntConfiguration->getInstance();
 
-
 	lodeImage(filename);
 
 	CellsToBlow = (pntConfiguration->RobotSize / 2) / (pntConfiguration->MapResolutionCM);
 
-
+	// Running over all the png map and blow it in CellsToBlow value
 	for (unsigned int nRow = 0; nRow < nHeight; nRow += 1)
 	{
 		for (unsigned int nCol = 0; nCol < nWidth; nCol += 1)
@@ -142,6 +141,7 @@ void Map::MakeGridFromImage(const char* filename, bool **GridMap, int *nGridWidt
 
 	int PixelInGrid;
 	const char* newfile = "hospital_section2.png";
+
 	saveImage(newfile, imageArray, nWidth, nHeight);
 	int nMapHight, nMapWidth;
 
@@ -155,6 +155,17 @@ void Map::MakeGridFromImage(const char* filename, bool **GridMap, int *nGridWidt
 	nMapHight = nHeight / PixelInGrid;
 	nMapWidth = nWidth / PixelInGrid;
 
+	int dividePNGToGrid = pntConfiguration->GridResolutionCM/pntConfiguration->MapResolutionCM;
+
+	pntConfiguration->StartLocation.Xpos /=dividePNGToGrid;
+	pntConfiguration->StartLocation.Ypos /=dividePNGToGrid;
+	pntConfiguration->Goal.Xpos /=dividePNGToGrid;
+	pntConfiguration->Goal.Ypos /=dividePNGToGrid;
+
+	cout << pntConfiguration->Goal.Xpos << "    " << pntConfiguration->Goal.Ypos << endl;
+	cout << pntConfiguration->StartLocation.Xpos << "    " << pntConfiguration->StartLocation.Ypos << endl;
+
+
 	GridMap = new bool*[nMapHight];
 	for (int i = 0; i < nMapHight; ++i)
 		GridMap[i] = new bool[nMapWidth];
@@ -165,18 +176,21 @@ void Map::MakeGridFromImage(const char* filename, bool **GridMap, int *nGridWidt
 			for (int nCol = 0; nCol < nMapWidth; nCol += 1)
 			{
 				GridMap[nRow][nCol] = CheckCell(nRow,nCol,PixelInGrid);
-				myFile << GridMap[nRow][nCol];
+				if((nRow == pntConfiguration->StartLocation.Ypos && nCol == pntConfiguration->StartLocation.Xpos) ||
+						(nRow == pntConfiguration->Goal.Ypos && nCol == pntConfiguration->Goal.Xpos))
+				{
+					myFile << '2';
+				}
+				else
+				{
+					myFile << GridMap[nRow][nCol];
+				}
 			}
+
 			myFile << '\n';
-
-		}
-		myFile.close();
-
+	}
+myFile.close();
 		*nGridWidth = nMapWidth;
 		*nGridHight = nMapHight;
 
 }
-
-
-
-
