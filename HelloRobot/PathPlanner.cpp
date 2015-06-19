@@ -3,8 +3,8 @@
  */
 
 #include "PathPlanner.h"
+#include "ConfigurationManager.h"
 #include "Map.h"
-#include "Globals.h"
 #include "lodepng.h"
 #include <iostream>
 #include <math.h>
@@ -13,17 +13,11 @@
 
 using namespace std;
 
-const int n=60; // horizontal size of the map
-const int m=60; // vertical size size of the map
-static int map[n][m];
-static int closed_nodes_map[n][m]; // map of closed (tried-out) nodes
-static int open_nodes_map[n][m]; // map of open (not-yet-tried) nodes
-static int dir_map[n][m]; // map of directions
+//const int n=60; // horizontal size of the map
+//const int m=60; // vertical size size of the map
+//static bool map[n][m];
+ // map of directions
 const int dir=8; // number of possible directions to go at any position
-// if dir==4
-//static int dx[dir]={1, 0, -1, 0};
-//static int dy[dir]={0, 1, 0, -1};
-// if dir==8
 static int dx[dir]={1, 1, 0, -1, -1, -1, 0, 1};
 static int dy[dir]={0, 1, 1, 1, 0, -1, -1, -1};
 
@@ -78,10 +72,19 @@ class node
         }
 };
 
-string AStarPathFind( const int & xStart, const int & yStart,
-                 const int & xFinish, const int & yFinish )
+// Determine priority (in the priority queue)
+bool operator<(const node & a, const node & b)
 {
-    static priority_queue<node> pq[2]; // list of open (not-yet-tried) nodes
+  return a.getPriority() > b.getPriority();
+}
+
+string PathPlanner::AStarPathFind( const int & xStart, const int & yStart,
+                 const int & xFinish, const int & yFinish, bool** GridMap, const int & Hight, const int & Width )
+{
+	int closed_nodes_map[Hight][Width]; // map of closed (tried-out) nodes
+	int open_nodes_map[Hight][Width]; // map of open (not-yet-tried) nodes
+	int dir_map[Hight][Width];
+	static priority_queue<node> pq[2]; // list of open (not-yet-tried) nodes
     static int pqi; // pq index
     static node* n0;
     static node* m0;
@@ -89,10 +92,11 @@ string AStarPathFind( const int & xStart, const int & yStart,
     static char c;
     pqi=0;
 
+
     // reset the node maps
-    for(y=0;y<m;y++)
+    for(y=0;y<Width;y++)
     {
-        for(x=0;x<n;x++)
+        for(x=0;x<Hight;x++)
         {
             closed_nodes_map[x][y]=0;
             open_nodes_map[x][y]=0;
@@ -148,7 +152,7 @@ string AStarPathFind( const int & xStart, const int & yStart,
         {
             xdx=x+dx[i]; ydy=y+dy[i];
 
-            if(!(xdx<0 || xdx>n-1 || ydy<0 || ydy>m-1 || map[xdx][ydy]==1
+            if(!(xdx<0 || xdx>Hight-1 || ydy<0 || ydy>Width-1 || GridMap[xdx][ydy]==1
                 || closed_nodes_map[xdx][ydy]==1))
             {
                 // generate a child node
