@@ -38,7 +38,7 @@ void ConfigurationMGR::ReadParametersFile()
 			FileVariable = FileContent.substr(0, Pos);
 			if (!FileVariable.compare("map"))
 			{
-				mapLocation = FileContent.substr(Pos + 2, FileContent.length());
+				mapLocation = FileContent.substr(Pos + 2, FileContent.length() - 6);
 				cout << mapLocation << endl;
 			}
 			else if (!FileVariable.compare("startLocation"))
