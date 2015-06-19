@@ -36,6 +36,7 @@ void ConfigurationMGR::ReadParametersFile()
 			getline(infile, FileContent);
 			Pos = FileContent.find(": ");
 			FileVariable = FileContent.substr(0, Pos);
+
 			if (!FileVariable.compare("map"))
 			{
 				mapLocation = FileContent.substr(Pos + 2, FileContent.length() - 6);

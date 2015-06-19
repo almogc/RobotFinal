@@ -20,7 +20,6 @@ public:
 	size_t Pos;
 	string  mapLocation;
 
-
 private:
 	void ReadParametersFile();
 

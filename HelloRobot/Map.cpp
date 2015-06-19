@@ -194,3 +194,4 @@ myFile.close();
 		*nGridHight = nMapHight;
 
 }
+
