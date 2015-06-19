@@ -2,7 +2,11 @@
  * PathPlanner.h
  */
 
-class PathPlanner {
+using namespace std;
+#include<string>
 
+class PathPlanner {
+public:
+	string AStarPathFind( const int & xStart, const int & yStart, const int & xFinish, const int & yFinish, bool** GridMap, const int & Hight, const int & Width );
 
 };
