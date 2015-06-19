@@ -6,6 +6,8 @@
  */
 
 #include "Map.h"
+#include "ConfigurationManager.h"
+#include "PathPlanner.h"
 #include <iostream>
 #include <fstream>
 
@@ -25,6 +27,17 @@ int main() {
 	cout << "Grid Hight: " << nGridHight << endl;
 	cout << "place [5][6] is " << GridMap[5][6];
 
+	for (int y = 0; y < nGridWidth; y++)
+	{
+		for (int x = 0; x < nGridHight; x++)
+		{
+			cout << GridMap[x][y];
+		}
+		cout << endl;
+	}
+
+	ConfigurationMGR *pntConfiguration;
+	pntConfiguration = pntConfiguration->getInstance();
 
 
 //	PlayerClient pc("localhost", 6665);
