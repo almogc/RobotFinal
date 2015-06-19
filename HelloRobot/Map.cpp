@@ -52,7 +52,7 @@ void saveImage(const char* filename, std::vector<unsigned char>& image, unsigned
 
 bool Map::CheckPlaceIsValid(int nRow,int nCol)
 {
-	if (nCol * 4 < 0 || nRow < 0 || nCol * 4 > nWidth * 4 - 8 || nRow > nHeight - 4)
+	if (nCol * 4 < 0 || nRow < 0 || nCol * 4 > nWidth * 4 - 8 || nRow > nHeight - 2)
 		return false;
 
 	return(true);
@@ -116,18 +116,21 @@ bool Map::CheckCell(int nRow, int nCol, int nCellsToCheck)
 
 }
 
-void Map::MakeGridFromImage(bool **GridMap, int *nGridWidth, int *nGridHight)
+void Map::MakeGridFromImage(bool **&GridMap, int *nGridWidth, int *nGridHight)
 {
 	ConfigurationMGR *pntConfiguration;
 	int CellsToBlow;
 
+	// Call Configurationmanager to get the parameters values
 	pntConfiguration = pntConfiguration->getInstance();
 
+	// Crate the array of pixels from the png file
 	lodeImage(pntConfiguration->mapLocation.c_str());
 
+	// Callculation how many pixel needs to be blow depending on the size of the robot
 	CellsToBlow = (pntConfiguration->RobotSize / 2) / (pntConfiguration->MapResolutionCM);
 
-	// Running over all the png map and blow it in CellsToBlow value
+	// Running over all the png map and blow it
 	for (unsigned int nRow = 0; nRow < nHeight; nRow += 1)
 	{
 		for (unsigned int nCol = 0; nCol < nWidth; nCol += 1)
@@ -139,59 +142,68 @@ void Map::MakeGridFromImage(bool **GridMap, int *nGridWidth, int *nGridHight)
 		}
 	}
 
-	int PixelInGrid;
-	const char* newfile = "hospital_section2.png";
 
+	int PixelInGrid;
+
+	// TODO: Remove this. its just for testing
+	const char* newfile = "hospital_section2.png";
 	saveImage(newfile, imageArray, nWidth, nHeight);
+	//
+
 	int nMapHight, nMapWidth;
 
-
+	// Callculation hoe many cells in the first array is one cell in the final grid
 	PixelInGrid = pntConfiguration->GridResolutionCM / pntConfiguration->MapResolutionCM;
 
 	ofstream myFile;
 	system("rm map.txt");
 	myFile.open("map.txt");
 
+	// Finds the size of the grid
 	nMapHight = nHeight / PixelInGrid;
 	nMapWidth = nWidth / PixelInGrid;
 
-	int dividePNGToGrid = pntConfiguration->GridResolutionCM/pntConfiguration->MapResolutionCM;
+	// Change the value of the start and the goal positions on the grid
+	pntConfiguration->StartLocation.Xpos /= PixelInGrid;
+	pntConfiguration->StartLocation.Ypos /= PixelInGrid;
+	pntConfiguration->Goal.Xpos /= PixelInGrid;
+	pntConfiguration->Goal.Ypos /= PixelInGrid;
 
-	pntConfiguration->StartLocation.Xpos /=dividePNGToGrid;
-	pntConfiguration->StartLocation.Ypos /=dividePNGToGrid;
-	pntConfiguration->Goal.Xpos /=dividePNGToGrid;
-	pntConfiguration->Goal.Ypos /=dividePNGToGrid;
-
+	// TODO: Remove this. its just for testing
 	cout << pntConfiguration->Goal.Xpos << "    " << pntConfiguration->Goal.Ypos << endl;
 	cout << pntConfiguration->StartLocation.Xpos << "    " << pntConfiguration->StartLocation.Ypos << endl;
+	//
 
-
+	// creating the matrixGrid
 	GridMap = new bool*[nMapHight];
-	for (int i = 0; i < nMapHight; ++i)
+	for (int i = 0; i < nMapHight; i++)
 		GridMap[i] = new bool[nMapWidth];
 
-
-		for (int nRow = 0; nRow < nMapHight; nRow +=1)
+	// Running over the grid and puts values using the first array
+	for (int nRow = 0; nRow < nMapHight; nRow++)
+	{
+		for (int nCol = 0; nCol < nMapWidth; nCol++)
 		{
-			for (int nCol = 0; nCol < nMapWidth; nCol += 1)
-			{
-				GridMap[nRow][nCol] = CheckCell(nRow,nCol,PixelInGrid);
-				if((nRow == pntConfiguration->StartLocation.Ypos && nCol == pntConfiguration->StartLocation.Xpos) ||
-						(nRow == pntConfiguration->Goal.Ypos && nCol == pntConfiguration->Goal.Xpos))
-				{
-					myFile << '2';
-				}
-				else
-				{
-					myFile << GridMap[nRow][nCol];
-				}
-			}
+			GridMap[nRow][nCol] = CheckCell(nRow,nCol,PixelInGrid);
 
-			myFile << '\n';
-	}
+			// TODO: Remove this. its just for testing
+			if((nRow == pntConfiguration->StartLocation.Ypos && nCol == pntConfiguration->StartLocation.Xpos) ||
+					(nRow == pntConfiguration->Goal.Ypos && nCol == pntConfiguration->Goal.Xpos))
+			{
+				myFile << '2';
+			}
+			else
+			{
+				myFile << GridMap[nRow][nCol];
+			}
+			//
+		}
+
+		myFile << '\n';
+}
 myFile.close();
-		*nGridWidth = nMapWidth;
-		*nGridHight = nMapHight;
+
+*nGridWidth = nMapWidth;
+*nGridHight = nMapHight;
 
 }
-
