@@ -79,7 +79,7 @@ bool operator<(const node & a, const node & b)
 }
 
 string PathPlanner::AStarPathFind( const int & xStart, const int & yStart,
-                 const int & xFinish, const int & yFinish, bool** GridMap, const int & Hight, const int & Width )
+                 const int & xFinish, const int & yFinish, int** GridMap, const int & Hight, const int & Width )
 {
 	int closed_nodes_map[Hight][Width]; // map of closed (tried-out) nodes
 	int open_nodes_map[Hight][Width]; // map of open (not-yet-tried) nodes
