@@ -15,7 +15,7 @@ using namespace std;
 
 
 int main() {
-	bool** GridMap;
+	int** GridMap = 0;
 	int nGridWidth, nGridHight;
 
 	Map map;
@@ -23,8 +23,12 @@ int main() {
 
 	cout << "Grid Width: " << nGridWidth << endl;
 	cout << "Grid Hight: " << nGridHight << endl;
+
 	cout << "place [5][6] is " << GridMap[5][6];
 
+	for (int i = 0; i < nGridHight; i++)
+		delete GridMap[i];
+	delete GridMap;
 
 
 //	PlayerClient pc("localhost", 6665);
@@ -53,4 +57,3 @@ int main() {
 	return 0;
 
 }
-
