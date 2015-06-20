@@ -78,6 +78,49 @@ bool operator<(const node & a, const node & b)
   return a.getPriority() > b.getPriority();
 }
 
+void PathPlanner::PrintPath(int** GridMap,const int & Hight, const int & Width, string route)
+{
+	// follow the route on the map and display it
+		if (route.length() > 0)
+		{
+			int j; char c;
+			int x = 1;
+			int y = 0;
+			GridMap[x][y] = 2;
+			for (int i = 0; i < route.length(); i++)
+			{
+				c = route.at(i);
+				j = atoi(&c);
+				x = x + dx[j];
+				y = y + dy[j];
+				GridMap[x][y] = 3;
+			}
+			GridMap[x][y] = 4;
+
+			// display the map with the route
+			for (int x = 0; x < Hight; x++)
+			{
+				for (int y = 0; y < Width; y++)
+				if (GridMap[x][y] == 0)
+					cout << ".";
+				else if (GridMap[x][y] == 1)
+					cout << "O"; //obstacle
+				else if (GridMap[x][y] == 2)
+					cout << "S"; //start
+				else if (GridMap[x][y] == 3)
+					cout << "R"; //route
+				else if (GridMap[x][y] == 4)
+					cout << "F"; //finish
+				cout << endl;
+			}
+		}
+		else
+		{
+			cout << "No route found";
+			cout << endl;
+		}
+}
+
 string PathPlanner::AStarPathFind( const int & xStart, const int & yStart,
                  const int & xFinish, const int & yFinish, int** GridMap, const int & Hight, const int & Width )
 {

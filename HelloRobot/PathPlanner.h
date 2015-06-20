@@ -8,5 +8,5 @@ using namespace std;
 class PathPlanner {
 public:
 	string AStarPathFind( const int & xStart, const int & yStart, const int & xFinish, const int & yFinish, int** GridMap, const int & Hight, const int & Width );
-
+	void PrintPath(int** GridMap,const int & Hight, const int & Width, string route);
 };
