@@ -4,10 +4,10 @@
 
 class Map {
 public:
-	void MakeGridFromImage(bool **&GridMap, int *nGridWidth, int *nGridHight);
+	void MakeGridFromImage(int **&GridMap, int *nGridWidth, int *nGridHight);
 
 private:
-	bool CheckCell(int nRow, int nCol, int nCellsToCheck);
+	int CheckCell(int nRow, int nCol, int nCellsToCheck);
 	bool CheckPlaceIsValid(int nRow,int nCol);
 	void NewBlow(int yPos, int xPos, int nCount);
 	void lodeImage(const char* filename);

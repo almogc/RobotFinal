@@ -80,7 +80,7 @@ void Map::NewBlow(int yPos, int xPos, int nCount)
 
 }
 
-bool Map::CheckCell(int nRow, int nCol, int nCellsToCheck)
+int Map::CheckCell(int nRow, int nCol, int nCellsToCheck)
 {
 	int nNumOfBlack = 0;
 	int nNumOfNewBlacks = 0;
@@ -88,6 +88,7 @@ bool Map::CheckCell(int nRow, int nCol, int nCellsToCheck)
 	nCol *= nCellsToCheck;
 	int Result;
 
+	// Running over the png vector and counts how many black and new black there is for this gridpixel
 	for (int nRowOfset = 0; nRowOfset < nCellsToCheck; nRowOfset += 1)
 	{
 		for (int nColOfset = 0; nColOfset < nCellsToCheck; nColOfset += 1)
@@ -110,13 +111,13 @@ bool Map::CheckCell(int nRow, int nCol, int nCellsToCheck)
 	}
 
 	if ((nNumOfBlack > 0) || (nNumOfNewBlacks > 2))
-		return true;
+		return 1;
 	else
-		return false;
+		return 0;
 
 }
 
-void Map::MakeGridFromImage(bool **&GridMap, int *nGridWidth, int *nGridHight)
+void Map::MakeGridFromImage(int **&GridMap, int *nGridWidth, int *nGridHight)
 {
 	ConfigurationMGR *pntConfiguration;
 	int CellsToBlow;
@@ -127,7 +128,7 @@ void Map::MakeGridFromImage(bool **&GridMap, int *nGridWidth, int *nGridHight)
 	// Crate the array of pixels from the png file
 	lodeImage(pntConfiguration->mapLocation.c_str());
 
-	// Callculation how many pixel needs to be blow depending on the size of the robot
+	// Callculate how many pixel needs to be blow depending on the size of the robot
 	CellsToBlow = (pntConfiguration->RobotSize / 2) / (pntConfiguration->MapResolutionCM);
 
 	// Running over all the png map and blow it
@@ -152,7 +153,7 @@ void Map::MakeGridFromImage(bool **&GridMap, int *nGridWidth, int *nGridHight)
 
 	int nMapHight, nMapWidth;
 
-	// Callculation hoe many cells in the first array is one cell in the final grid
+	// Callculate how many cells in the first array is one cell in the final grid
 	PixelInGrid = pntConfiguration->GridResolutionCM / pntConfiguration->MapResolutionCM;
 
 	ofstream myFile;
@@ -175,9 +176,9 @@ void Map::MakeGridFromImage(bool **&GridMap, int *nGridWidth, int *nGridHight)
 	//
 
 	// creating the matrixGrid
-	GridMap = new bool*[nMapHight];
+	GridMap = new int*[nMapHight];
 	for (int i = 0; i < nMapHight; i++)
-		GridMap[i] = new bool[nMapWidth];
+		GridMap[i] = new int[nMapWidth];
 
 	// Running over the grid and puts values using the first array
 	for (int nRow = 0; nRow < nMapHight; nRow++)
