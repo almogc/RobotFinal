@@ -78,14 +78,14 @@ bool operator<(const node & a, const node & b)
   return a.getPriority() > b.getPriority();
 }
 
-void PathPlanner::PrintPath(int** GridMap,const int & Hight, const int & Width, string route)
+void PathPlanner::PrintPath(int** GridMap,const int & xStart, const int & yStart, const int & Hight, const int & Width, string route)
 {
 	// follow the route on the map and display it
 		if (route.length() > 0)
 		{
 			int j; char c;
-			int x = 1;
-			int y = 0;
+			int x = xStart;
+			int y = yStart;
 			GridMap[x][y] = 2;
 			for (int i = 0; i < route.length(); i++)
 			{

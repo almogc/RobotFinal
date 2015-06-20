@@ -25,19 +25,16 @@ int main() {
 
 	cout << "Grid Width: " << nGridWidth << endl;
 	cout << "Grid Hight: " << nGridHight << endl;
-	cout << "place [5][6] is " << GridMap[5][6];
-
-	for (int y = 0; y < nGridWidth; y++)
-	{
-		for (int x = 0; x < nGridHight; x++)
-		{
-			cout << GridMap[x][y];
-		}
-		cout << endl;
-	}
+	cout << "place [5][6] is " << GridMap[5][6] << endl;
 
 	ConfigurationMGR *pntConfiguration;
 	pntConfiguration = pntConfiguration->getInstance();
+
+	PathPlanner path;
+	string route = path.AStarPathFind(pntConfiguration->StartLocation.Xpos,pntConfiguration->StartLocation.Ypos,
+			pntConfiguration->Goal.Xpos,pntConfiguration->Goal.Ypos,GridMap, nGridHight, nGridWidth);
+
+	path.PrintPath(GridMap,pntConfiguration->StartLocation.Xpos,pntConfiguration->StartLocation.Ypos, nGridHight, nGridWidth,route);
 
 
 //	PlayerClient pc("localhost", 6665);
