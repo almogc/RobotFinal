@@ -2,6 +2,7 @@
  * Map.cpp
  */
 
+
 #include "Map.h"
 #include "ConfigurationManager.h"
 #include "lodepng.h"

@@ -2,6 +2,9 @@
  * Map.h
  */
 
+#ifndef MAP_H_
+#define MAP_H_
+
 class Map {
 public:
 	void MakeGridFromImage(int **&GridMap, int *nGridWidth, int *nGridHight);
@@ -14,3 +17,5 @@ private:
 	int GetPositionAsMatrix(int nRow, int nCol);
 	void SetPositionAsMatrix(int nRow, int nCol, int nValue);
 };
+
+#endif

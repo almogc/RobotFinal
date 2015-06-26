@@ -78,21 +78,22 @@ bool operator<(const node & a, const node & b)
   return a.getPriority() > b.getPriority();
 }
 
-void PathPlanner::PrintPath(int** GridMap,const int & xStart, const int & yStart, const int & Hight, const int & Width, string route)
+void PathPlanner::PrintPath(int** GridMap,const int nRowStart, const int nColStart, const int Hight, const int Width, string route)
 {
 	// follow the route on the map and display it
 		if (route.length() > 0)
 		{
-			int j; char c;
-			int x = xStart;
-			int y = yStart;
+			int direction;
+			char c;
+			unsigned int x = nRowStart;
+			unsigned int y = nColStart;
 			GridMap[x][y] = 2;
-			for (int i = 0; i < route.length(); i++)
+			for (unsigned int i = 0; i < route.length(); i++)
 			{
 				c = route.at(i);
-				j = atoi(&c);
-				x = x + dx[j];
-				y = y + dy[j];
+				direction = c-'0';
+				x += dx[direction];
+				y += dy[direction];
 				GridMap[x][y] = 3;
 			}
 			GridMap[x][y] = 4;
@@ -101,16 +102,19 @@ void PathPlanner::PrintPath(int** GridMap,const int & xStart, const int & yStart
 			for (int x = 0; x < Hight; x++)
 			{
 				for (int y = 0; y < Width; y++)
-				if (GridMap[x][y] == 0)
+				{
+					if (GridMap[x][y] == 0)
 					cout << ".";
-				else if (GridMap[x][y] == 1)
+					else if (GridMap[x][y] == 1)
 					cout << "O"; //obstacle
-				else if (GridMap[x][y] == 2)
+					else if (GridMap[x][y] == 2)
 					cout << "S"; //start
-				else if (GridMap[x][y] == 3)
+					else if (GridMap[x][y] == 3)
 					cout << "R"; //route
-				else if (GridMap[x][y] == 4)
+					else if (GridMap[x][y] == 4)
 					cout << "F"; //finish
+
+				}
 				cout << endl;
 			}
 		}
@@ -121,8 +125,8 @@ void PathPlanner::PrintPath(int** GridMap,const int & xStart, const int & yStart
 		}
 }
 
-string PathPlanner::AStarPathFind( const int & xStart, const int & yStart,
-                 const int & xFinish, const int & yFinish, int** GridMap, const int & Hight, const int & Width )
+string PathPlanner::AStarPathFind( const int nRowStart, const int nColStart,
+                 const int nRowFinish, const int nColFinish, int** GridMap, const int Hight, const int Width )
 {
 	int closed_nodes_map[Hight][Width]; // map of closed (tried-out) nodes
 	int open_nodes_map[Hight][Width]; // map of open (not-yet-tried) nodes
@@ -131,26 +135,26 @@ string PathPlanner::AStarPathFind( const int & xStart, const int & yStart,
     static int pqi; // pq index
     static node* n0;
     static node* m0;
-    static int i, j, x, y, xdx, ydy;
+    static int i, j, nRow, nCol, xdx, ydy;
     static char c;
     pqi=0;
 
 
     // reset the node maps
-    for(y=0;y<Width;y++)
+    for(nRow = 0;nRow < Hight;nRow++)
     {
-        for(x=0;x<Hight;x++)
-        {
-            closed_nodes_map[x][y]=0;
-            open_nodes_map[x][y]=0;
+		for(nCol = 0;nCol < Width;nCol++)
+		{
+            closed_nodes_map[nRow][nCol]=0;
+            open_nodes_map[nRow][nCol]=0;
         }
     }
 
     // create the start node and push into list of open nodes
-    n0=new node(xStart, yStart, 0, 0);
-    n0->updatePriority(xFinish, yFinish);
+    n0=new node(nRowStart, nColStart, 0, 0);
+    n0->updatePriority(nRowFinish, nColFinish);
     pq[pqi].push(*n0);
-    open_nodes_map[x][y]=n0->getPriority(); // mark it on the open nodes map
+    open_nodes_map[nRow][nCol]=n0->getPriority(); // mark it on the open nodes map
 
     // A* search
     while(!pq[pqi].empty())
@@ -160,27 +164,27 @@ string PathPlanner::AStarPathFind( const int & xStart, const int & yStart,
         n0=new node( pq[pqi].top().getxPos(), pq[pqi].top().getyPos(),
                      pq[pqi].top().getLevel(), pq[pqi].top().getPriority());
 
-        x=n0->getxPos(); y=n0->getyPos();
+        nRow=n0->getxPos(); nCol=n0->getyPos();
 
         pq[pqi].pop(); // remove the node from the open list
-        open_nodes_map[x][y]=0;
+        open_nodes_map[nRow][nCol]=0;
         // mark it on the closed nodes map
-        closed_nodes_map[x][y]=1;
+        closed_nodes_map[nRow][nCol]=1;
 
         // quit searching when the goal state is reached
         //if((*n0).estimate(xFinish, yFinish) == 0)
-        if(x==xFinish && y==yFinish)
+        if(nRow==nRowFinish && nCol==nColFinish)
         {
             // generate the path from finish to start
             // by following the directions
             string path="";
-            while(!(x==xStart && y==yStart))
+            while(!(nRow==nRowStart && nCol==nColStart))
             {
-                j=dir_map[x][y];
+                j=dir_map[nRow][nCol];
                 c='0'+(j+dir/2)%dir;
                 path=c+path;
-                x+=dx[j];
-                y+=dy[j];
+                nRow+=dx[j];
+                nCol+=dy[j];
             }
 
             // garbage collection
@@ -193,7 +197,7 @@ string PathPlanner::AStarPathFind( const int & xStart, const int & yStart,
         // generate moves (child nodes) in all possible directions
         for(i=0;i<dir;i++)
         {
-            xdx=x+dx[i]; ydy=y+dy[i];
+            xdx=nRow+dx[i]; ydy=nCol+dy[i];
 
             if(!(xdx<0 || xdx>Hight-1 || ydy<0 || ydy>Width-1 || GridMap[xdx][ydy]==1
                 || closed_nodes_map[xdx][ydy]==1))
@@ -202,7 +206,7 @@ string PathPlanner::AStarPathFind( const int & xStart, const int & yStart,
                 m0=new node( xdx, ydy, n0->getLevel(),
                              n0->getPriority());
                 m0->nextLevel(i);
-                m0->updatePriority(xFinish, yFinish);
+                m0->updatePriority(nRowFinish, nColFinish);
 
                 // if it is not in the open list then add into that
                 if(open_nodes_map[xdx][ydy]==0)
