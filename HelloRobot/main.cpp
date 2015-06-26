@@ -31,10 +31,10 @@ int main() {
 	pntConfiguration = pntConfiguration->getInstance();
 
 	PathPlanner path;
-	string route = path.AStarPathFind(pntConfiguration->StartLocation.Xpos,pntConfiguration->StartLocation.Ypos,
-			pntConfiguration->Goal.Xpos,pntConfiguration->Goal.Ypos,GridMap, nGridHight, nGridWidth);
+	string route = path.AStarPathFind(pntConfiguration->StartLocation.Ypos,pntConfiguration->StartLocation.Xpos,
+			pntConfiguration->Goal.Ypos,pntConfiguration->Goal.Xpos,GridMap, nGridHight, nGridWidth);
 
-	path.PrintPath(GridMap,pntConfiguration->StartLocation.Xpos,pntConfiguration->StartLocation.Ypos, nGridHight, nGridWidth,route);
+	path.PrintPath(GridMap,pntConfiguration->StartLocation.Ypos,pntConfiguration->StartLocation.Xpos, nGridHight, nGridWidth,route);
 
 
 //	PlayerClient pc("localhost", 6665);
