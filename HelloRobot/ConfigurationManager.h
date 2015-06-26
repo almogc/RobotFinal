@@ -2,6 +2,9 @@
  * ConfigurationManager.h
  */
 
+#ifndef CONFIGURATIONMANAGER_H_
+#define CONFIGURATIONMANAGER_H_
+
 using namespace std;
 
 #include<string>
@@ -24,3 +27,5 @@ private:
 	void ReadParametersFile();
 
 };
+
+#endif
