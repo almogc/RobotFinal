@@ -10,7 +10,7 @@
 #include "PathPlanner.h"
 #include <iostream>
 #include <fstream>
-
+#include "Particle.h"
 
 using namespace std;
 
@@ -26,6 +26,25 @@ int main() {
 	cout << "Grid Width: " << nGridWidth << endl;
 	cout << "Grid Hight: " << nGridHight << endl;
 	cout << "place [5][6] is " << GridMap[5][6] << endl;
+
+	Particle* arr_particles[PARTICLE_NUM];
+
+		for (int i = 0; i < PARTICLE_NUM; i++)
+		{
+			int x = rand() % (int)(nGridHight);
+			int y = rand() % (int)(nGridHight);
+			int yaw = rand() % (int)(ANGLES_NUM);
+			if(GridMap[x][y]==0)
+			{
+				GridMap[x][y] = 5;
+
+				arr_particles[i] = new Particle(x, y, yaw, 1);
+			}
+			else
+			{
+				i--;
+			}
+		}
 
 	ConfigurationMGR *pntConfiguration;
 	pntConfiguration = pntConfiguration->getInstance();

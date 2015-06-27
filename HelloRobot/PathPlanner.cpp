@@ -113,6 +113,8 @@ void PathPlanner::PrintPath(int** GridMap,const int nRowStart, const int nColSta
 					cout << "R"; //route
 					else if (GridMap[x][y] == 4)
 					cout << "F"; //finish
+					else if (GridMap[x][y] == 5)
+					cout << "P"; //particle
 
 				}
 				cout << endl;
