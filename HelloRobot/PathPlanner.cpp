@@ -13,27 +13,26 @@
 
 using namespace std;
 
-//const int n=60; // horizontal size of the map
-//const int m=60; // vertical size size of the map
-//static bool map[n][m];
  // map of directions
-const int dir=8; // number of possible directions to go at any position
-static int dx[dir]={1, 1, 0, -1, -1, -1, 0, 1};
-static int dy[dir]={0, 1, 1, 1, 0, -1, -1, -1};
+const int dirNum=8; // number of possible directions to go at any position
+static int dirX[dirNum]={1, 1, 0, -1, -1, -1, 0, 1};
+static int dirY[dirNum]={0, 1, 1, 1, 0, -1, -1, -1};
 
 
-class node
+class Node
 {
 	// current position
     int xPos;
     int yPos;
+
     // total distance already travelled to reach the node
     int level;
+
     // priority=level+remaining distance estimate
     int priority;  // smaller: higher priority
 
     public:
-        node(int xp, int yp, int d, int p)
+        Node(int xp, int yp, int d, int p)
             {xPos=xp; yPos=yp; level=d; priority=p;}
 
         int getxPos() const {return xPos;}
@@ -49,7 +48,7 @@ class node
         // give better priority to going strait instead of diagonally
         void nextLevel(const int & i) // i: direction
         {
-             level+=(dir==8?(i%2==0?10:14):10);
+             level+=(dirNum==8?(i%2==0?10:14):10);
         }
 
         // Estimation function for the remaining distance to the goal.
@@ -59,23 +58,17 @@ class node
             xd=xDest-xPos;
             yd=yDest-yPos;
 
-            // Euclidian Distance
+            //Distance
             d=static_cast<int>(sqrt(xd*xd+yd*yd));
-
-            // Manhattan distance
-            //d=abs(xd)+abs(yd);
-
-            // Chebyshev distance
-            //d=max(abs(xd), abs(yd));
 
             return(d);
         }
 };
 
 // Determine priority (in the priority queue)
-bool operator<(const node & a, const node & b)
+bool operator<(const Node & nodeA, const Node & nodeB)
 {
-  return a.getPriority() > b.getPriority();
+  return nodeA.getPriority() > nodeB.getPriority();
 }
 
 void PathPlanner::PrintPath(int** GridMap,const int nRowStart, const int nColStart, const int Hight, const int Width, string route)
@@ -92,8 +85,8 @@ void PathPlanner::PrintPath(int** GridMap,const int nRowStart, const int nColSta
 			{
 				c = route.at(i);
 				direction = c-'0';
-				x += dx[direction];
-				y += dy[direction];
+				x += dirX[direction];
+				y += dirY[direction];
 				GridMap[x][y] = 3;
 			}
 			GridMap[x][y] = 4;
@@ -133,124 +126,129 @@ string PathPlanner::AStarPathFind( const int nRowStart, const int nColStart,
 	int closed_nodes_map[Hight][Width]; // map of closed (tried-out) nodes
 	int open_nodes_map[Hight][Width]; // map of open (not-yet-tried) nodes
 	int dir_map[Hight][Width];
-	static priority_queue<node> pq[2]; // list of open (not-yet-tried) nodes
-    static int pqi; // pq index
-    static node* n0;
-    static node* m0;
-    static int i, j, nRow, nCol, xdx, ydy;
+	static priority_queue<Node> prior_queue[2]; // list of open (not-yet-tried) nodes
+    static int pqIndex; // Priority queue index
+    static Node* nNodeA;
+    static Node* nNodeB;
+    static int dirIndex, cellIndex, RowIndex, ColIndex, xdx, ydy;
     static char c;
-    pqi=0;
+    pqIndex=0;
 
 
-    // reset the node maps
-    for(nRow = 0;nRow < Hight;nRow++)
+    // Initialize the cells in the maps
+    for(RowIndex = 0;RowIndex < Hight;RowIndex++)
     {
-		for(nCol = 0;nCol < Width;nCol++)
+		for(ColIndex = 0;ColIndex < Width;ColIndex++)
 		{
-            closed_nodes_map[nRow][nCol]=0;
-            open_nodes_map[nRow][nCol]=0;
+            closed_nodes_map[RowIndex][ColIndex]=0;
+            open_nodes_map[RowIndex][ColIndex]=0;
         }
     }
 
     // create the start node and push into list of open nodes
-    n0=new node(nRowStart, nColStart, 0, 0);
-    n0->updatePriority(nRowFinish, nColFinish);
-    pq[pqi].push(*n0);
-    open_nodes_map[nRow][nCol]=n0->getPriority(); // mark it on the open nodes map
+    nNodeA=new Node(nRowStart, nColStart, 0, 0);
+    nNodeA->updatePriority(nRowFinish, nColFinish);
+    prior_queue[pqIndex].push(*nNodeA);
+    open_nodes_map[RowIndex][ColIndex]=nNodeA->getPriority(); // mark it on the open nodes map
 
     // A* search
-    while(!pq[pqi].empty())
+    while(!prior_queue[pqIndex].empty())
     {
         // get the current node w/ the highest priority
         // from the list of open nodes
-        n0=new node( pq[pqi].top().getxPos(), pq[pqi].top().getyPos(),
-                     pq[pqi].top().getLevel(), pq[pqi].top().getPriority());
+    	nNodeA=new Node( prior_queue[pqIndex].top().getxPos(), prior_queue[pqIndex].top().getyPos(),
+    					prior_queue[pqIndex].top().getLevel(), prior_queue[pqIndex].top().getPriority());
 
-        nRow=n0->getxPos(); nCol=n0->getyPos();
+        RowIndex=nNodeA->getxPos();
+        ColIndex=nNodeA->getyPos();
 
-        pq[pqi].pop(); // remove the node from the open list
-        open_nodes_map[nRow][nCol]=0;
+        prior_queue[pqIndex].pop(); // remove the node from the open list
+        open_nodes_map[RowIndex][ColIndex]=0;
         // mark it on the closed nodes map
-        closed_nodes_map[nRow][nCol]=1;
+        closed_nodes_map[RowIndex][ColIndex]=1;
 
         // quit searching when the goal state is reached
-        //if((*n0).estimate(xFinish, yFinish) == 0)
-        if(nRow==nRowFinish && nCol==nColFinish)
+        //if((*nodeA).estimate(xFinish, yFinish) == 0)
+        if(RowIndex==nRowFinish && ColIndex==nColFinish)
         {
             // generate the path from finish to start
             // by following the directions
             string path="";
-            while(!(nRow==nRowStart && nCol==nColStart))
+            while(!(RowIndex==nRowStart && ColIndex==nColStart))
             {
-                j=dir_map[nRow][nCol];
-                c='0'+(j+dir/2)%dir;
+            	cellIndex=dir_map[RowIndex][ColIndex];
+                c='0'+(cellIndex+dirNum/2)%dirNum;
                 path=c+path;
-                nRow+=dx[j];
-                nCol+=dy[j];
+                RowIndex+=dirX[cellIndex];
+                ColIndex+=dirY[cellIndex];
             }
 
             // garbage collection
-            delete n0;
+            delete nNodeA;
+
             // empty the leftover nodes
-            while(!pq[pqi].empty()) pq[pqi].pop();
+            while(!prior_queue[pqIndex].empty()) prior_queue[pqIndex].pop();
             return path;
         }
 
         // generate moves (child nodes) in all possible directions
-        for(i=0;i<dir;i++)
+        for(dirIndex=0;dirIndex<dirNum;dirIndex++)
         {
-            xdx=nRow+dx[i]; ydy=nCol+dy[i];
+            xdx=RowIndex+dirX[dirIndex];
+            ydy=ColIndex+dirY[dirIndex];
 
             if(!(xdx<0 || xdx>Hight-1 || ydy<0 || ydy>Width-1 || GridMap[xdx][ydy]==1
                 || closed_nodes_map[xdx][ydy]==1))
             {
                 // generate a child node
-                m0=new node( xdx, ydy, n0->getLevel(),
-                             n0->getPriority());
-                m0->nextLevel(i);
-                m0->updatePriority(nRowFinish, nColFinish);
+            	nNodeB=new Node( xdx, ydy, nNodeA->getLevel(),
+                		nNodeA->getPriority());
+            	nNodeB->nextLevel(dirIndex);
+            	nNodeB->updatePriority(nRowFinish, nColFinish);
 
                 // if it is not in the open list then add into that
                 if(open_nodes_map[xdx][ydy]==0)
                 {
-                    open_nodes_map[xdx][ydy]=m0->getPriority();
-                    pq[pqi].push(*m0);
+                    open_nodes_map[xdx][ydy]=nNodeB->getPriority();
+                    prior_queue[pqIndex].push(*nNodeB);
                     // mark its parent node direction
-                    dir_map[xdx][ydy]=(i+dir/2)%dir;
+                    dir_map[xdx][ydy]=(dirIndex+dirNum/2)%dirNum;
                 }
-                else if(open_nodes_map[xdx][ydy]>m0->getPriority())
+                else if(open_nodes_map[xdx][ydy]>nNodeB->getPriority())
                 {
                     // update the priority info
-                    open_nodes_map[xdx][ydy]=m0->getPriority();
+                    open_nodes_map[xdx][ydy]=nNodeB->getPriority();
                     // update the parent direction info
-                    dir_map[xdx][ydy]=(i+dir/2)%dir;
+                    dir_map[xdx][ydy]=(dirIndex+dirNum/2)%dirNum;
 
-                    // replace the node
-                    // by emptying one pq to the other one
-                    // except the node to be replaced will be ignored
-                    // and the new node will be pushed in instead
-                    while(!(pq[pqi].top().getxPos()==xdx &&
-                           pq[pqi].top().getyPos()==ydy))
+                    /* replace the node by emptying one priority queue to the other one
+                     except the node to be replaced will be ignored and the new node will be pushed in instead*/
+                    while(!(prior_queue[pqIndex].top().getxPos()==xdx &&
+                    		prior_queue[pqIndex].top().getyPos()==ydy))
                     {
-                        pq[1-pqi].push(pq[pqi].top());
-                        pq[pqi].pop();
+                    	prior_queue[1-pqIndex].push(prior_queue[pqIndex].top());
+                    	prior_queue[pqIndex].pop();
                     }
-                    pq[pqi].pop(); // remove the wanted node
 
-                    // empty the larger size pq to the smaller one
-                    if(pq[pqi].size()>pq[1-pqi].size()) pqi=1-pqi;
-                    while(!pq[pqi].empty())
+                    // remove the wanted node
+                    prior_queue[pqIndex].pop();
+
+                    // empty the larger size priority queue to the smaller one
+                    if(prior_queue[pqIndex].size()>prior_queue[1-pqIndex].size()) pqIndex=1-pqIndex;
+                    while(!prior_queue[pqIndex].empty())
                     {
-                        pq[1-pqi].push(pq[pqi].top());
-                        pq[pqi].pop();
+                    	prior_queue[1-pqIndex].push(prior_queue[pqIndex].top());
+                    	prior_queue[pqIndex].pop();
                     }
-                    pqi=1-pqi;
-                    pq[pqi].push(*m0); // add the better node instead
+                    pqIndex=1-pqIndex;
+                    prior_queue[pqIndex].push(*nNodeB); // add the better node instead
                 }
-                else delete m0; // garbage collection
+                else delete nNodeB;
             }
         }
-        delete n0; // garbage collection
+        delete nNodeA;
     }
-    return ""; // no route found
+
+    // no route found
+    return "";
 }
