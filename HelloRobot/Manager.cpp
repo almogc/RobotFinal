@@ -42,6 +42,10 @@ void Manager::Start(){
 		double oldY = 0;
 		double oldYaw = 0;
 
+
+
+
+
 		while (_currBehavior != 0)
 		{
 			while(!_currBehavior->stopCond())

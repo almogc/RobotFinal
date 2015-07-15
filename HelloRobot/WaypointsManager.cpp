@@ -25,8 +25,8 @@ void WayPointsManager::createWaypoints(string route, Location* arr)
 				arr = new Location[50];
 				Location* tempArr;
 				char c;
-				unsigned int x = 0;
-				unsigned int y = 0;
+				unsigned int x = pntConfiguration->StartLocation.Xpos;
+				unsigned int y = pntConfiguration->StartLocation.Ypos;
 
 				for (unsigned int i = 0; i < route.length(); i++)
 				{
@@ -43,8 +43,6 @@ void WayPointsManager::createWaypoints(string route, Location* arr)
 					{
 						arr[nNumOfWayPoints].Xpos = x;
 						arr[nNumOfWayPoints].Ypos = y;
-						x = 0;
-						y = 0;
 						lastDirection = direction;
 						counter = 0;
 						nNumOfWayPoints++;

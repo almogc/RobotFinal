@@ -19,7 +19,7 @@ using namespace std;
 int main() {
 	int** GridMap;
 	int nGridWidth, nGridHight;
-
+	Location* locations;
 	Map map;
 	map.MakeGridFromImage(GridMap,&nGridWidth, &nGridHight);
 
@@ -54,6 +54,12 @@ int main() {
 			pntConfiguration->Goal.Ypos,pntConfiguration->Goal.Xpos,GridMap, nGridHight, nGridWidth);
 
 	path.PrintPath(GridMap,pntConfiguration->StartLocation.Ypos,pntConfiguration->StartLocation.Xpos, nGridHight, nGridWidth,route);
+
+	WayPointsManager waypoint;
+	waypoint.createWaypoints(route, locations);
+
+	Manager
+
 
 
 //	PlayerClient pc("localhost", 6665);

@@ -8,7 +8,7 @@
 #include "Behavior.h"
 
 Behavior::Behavior(Robot* robot) {
-	_next = NULL;
+	_next = 0;
 	_behaviorsCount = 0;
 	_robot = robot;
 }
@@ -18,7 +18,7 @@ Behavior* Behavior::addNext(Behavior* behavior)
 	int i;
 	Behavior** tmp = new Behavior*[_behaviorsCount+1];
 	if(!tmp)
-		return NULL;
+		return 0;
 	for(i=0;i<_behaviorsCount;i++)
 		tmp[i] = _next[i];
 	tmp[i] = behavior;
@@ -35,7 +35,7 @@ Behavior* Behavior::selectNext()
 			return _next[i];
 
 	cout << "next is NULL!!!" << endl;
-	return NULL;
+	return 0;
 }
 
 Behavior::~Behavior() {
