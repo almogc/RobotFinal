@@ -12,7 +12,7 @@ class Particle{
 	#define COEFFICIENT (1.5)
 
 	protected:
-		Map* _particleMap;
+		int** _particleMap;
 		double _locationX;
 		double _locationY;
 		double _yaw;
@@ -21,7 +21,7 @@ class Particle{
 		int _GridHight;
 
 	public:
-		Particle(double x, double y, double pYaw, double bel, Map* map,int nGridWidth, int nGridHight);
+		Particle(double x, double y, double pYaw, double bel, int** map,int nGridWidth, int nGridHight);
 		virtual ~Particle();
 		void UpdateParticle(double deltaX, double deltaY, double deltaYaw, Robot* robot);
 		double getBelief();
