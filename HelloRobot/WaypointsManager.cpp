@@ -28,12 +28,13 @@ void WayPointsManager::createWaypoints(string route, Location* arr)
 				unsigned int x = pntConfiguration->StartLocation.Xpos;
 				unsigned int y = pntConfiguration->StartLocation.Ypos;
 
+				cout << "start - X: " << pntConfiguration->StartLocation.Xpos << " Y: " << pntConfiguration->StartLocation.Ypos << endl;
+				cout << "finish - X: " << pntConfiguration->Goal.Xpos << " Y: " << pntConfiguration->Goal.Ypos << endl;
+
 				for (unsigned int i = 0; i < route.length(); i++)
 				{
 					c = route.at(i);
 					direction = c-'0';
-					x += dirX[direction];
-					y += dirY[direction];
 
 					if(lastDirection == direction)
 					{
@@ -46,8 +47,13 @@ void WayPointsManager::createWaypoints(string route, Location* arr)
 						lastDirection = direction;
 						counter = 0;
 						nNumOfWayPoints++;
+						cout << "x: " << x << " y: " << y << endl;
 					}
+
+					x += dirX[direction];
+					y += dirY[direction];
 				}
+				cout << "x: " << x << " y: " << y << endl;
 				cout << "a";
 
 			}
