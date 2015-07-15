@@ -50,8 +50,11 @@ void WayPointsManager::createWaypoints(string route, Location* arr)
 						cout << "x: " << x << " y: " << y << endl;
 					}
 
-					x += dirX[direction];
-					y += dirY[direction];
+					//Swich X Y
+					//x += dirX[direction];
+					//y += dirY[direction];
+					x += dirY[direction];
+					y += dirX[direction];
 				}
 				cout << "x: " << x << " y: " << y << endl;
 				cout << "a";
