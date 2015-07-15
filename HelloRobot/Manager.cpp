@@ -9,6 +9,7 @@
 #include "Behaviors/MoveForward.h"
 #include "Behaviors/MoveRight.h"
 #include "Behaviors/MoveLeft.h"
+#include "math.h"
 
 Manager::Manager(Robot* robot) {
 	_robot = robot;
@@ -51,6 +52,16 @@ void Manager::Start(){
 				currX = _robot->getXPos();
 				currY = _robot->getYPos();
 				currYaw = _robot->getYaw();
+
+
+
+				double distance = sqrt(pow(currX - oldX, 2) + pow(currY - oldY, 2));
+				double radYaw = (currYaw - oldYaw) / 180.0 * M_PI;
+
+				double locationX = (cos(radYaw) * distance);
+				double locationY = (sin(radYaw) * distance);
+
+
 
 				// printing robot's location
 				//cout << "Robot location: " << currX << ", " << currY << ", " << currYaw << endl;
