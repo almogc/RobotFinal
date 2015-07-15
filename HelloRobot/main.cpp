@@ -38,7 +38,7 @@ int main() {
 			{
 				GridMap[x][y] = 5;
 
-				arr_particles[i] = new Particle(x, y, yaw, 1);
+//				arr_particles[i] = new Particle(x, y, yaw, 1);
 			}
 			else
 			{

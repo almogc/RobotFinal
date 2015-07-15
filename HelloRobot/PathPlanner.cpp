@@ -13,12 +13,6 @@
 
 using namespace std;
 
- // map of directions
-const int dirNum=8; // number of possible directions to go at any position
-static int dirX[dirNum]={1, 1, 0, -1, -1, -1, 0, 1};
-static int dirY[dirNum]={0, 1, 1, 1, 0, -1, -1, -1};
-
-
 class Node
 {
 	// current position

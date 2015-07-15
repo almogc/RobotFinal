@@ -1,7 +1,11 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
-
+struct Location {
+		  int Xpos;
+		  int Ypos;
+		  int Yaw;;
+		} ;
 struct StartLocationType {
 		  int Xpos;
 		  int Ypos;
