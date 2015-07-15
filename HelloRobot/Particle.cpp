@@ -6,7 +6,7 @@
 #include "ConfigurationManager.h"
 #include "math.h"
 
-Particle::Particle(double x, double y, double pYaw, double bel, Map* map, int nGridWidth, int nGridHight) : _locationX(x), _locationY(y), _yaw(pYaw), _belief(bel), _particleMap(map), _GridWidth(nGridWidth), _GridHight(nGridHight)
+Particle::Particle(double x, double y, double pYaw, double bel, int** map, int nGridWidth, int nGridHight) : _locationX(x), _locationY(y), _yaw(pYaw), _belief(bel), _particleMap(map), _GridWidth(nGridWidth), _GridHight(nGridHight)
 {
 
 
@@ -68,8 +68,6 @@ double Particle::calcObsProb(Robot* robot)
 {
 	int hits = 0;
 	int miss = 0;
-// todo
-//	Map oldMap = Map(_particleMap);
 	double dist;
 	double currAngle;
 	double diffX;
@@ -98,8 +96,9 @@ double Particle::calcObsProb(Robot* robot)
 		{
 			SetValFromRealLocation(_locationX + (j * diffX) , _locationY + (j * diffY) , 0);
 		}
-// todo
-//		curObsVal = oldMap.GetValFromRealLocation(diffX + _locationX, diffY + _locationY);
+
+
+		curObsVal = GetValFromRealLocation(diffX + _locationX, diffY + _locationY);
 
 		// Calc hits, miss
 		if (dist < MAX_OBS_DISTANCE)
@@ -140,8 +139,8 @@ void Particle::SetValFromRealLocation(double x, double y, int value)
 
 	//cout << "puttig in " << xMapLocation << " , " << yMapLocation << " value " << value << endl;
 
-//todo
-//	_particleMap[xMapLocation][yMapLocation] = value;
+
+	_particleMap[xMapLocation][yMapLocation] = value;
 }
 
 
@@ -163,7 +162,6 @@ int Particle::GetValFromRealLocation(double x, double y)
 	{
 		yMapLocation = _GridHight - 1;
 	}
-//todo
-	return 1;
-	//return _particleMap[xMapLocation][yMapLocation];
+
+	return _particleMap[xMapLocation][yMapLocation];
 }
