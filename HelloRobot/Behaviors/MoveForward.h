@@ -9,13 +9,14 @@
 #define MOVEFORWARD_H_
 
 #include "Behavior.h"
+#include "../Globals.h"
 
 class MoveForward: public Behavior {
 public:
 	MoveForward(Robot* robot);
 	bool startCond();
 	bool stopCond();
-	void doAction();
+	void doAction(Location waypoint);
 	virtual ~MoveForward();
 };
 

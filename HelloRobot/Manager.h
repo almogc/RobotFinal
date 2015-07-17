@@ -9,7 +9,7 @@
 #define MANAGER_H_
 
 #include "Behaviors/Behavior.h"
-
+#include "Globals.h"
 
 class Manager {
 protected:
@@ -19,8 +19,12 @@ protected:
 
 public:
 	Manager(Robot* robot);
-	void Start();
+	void Start(Location* arr);
 	virtual ~Manager();
+
+
+
+
 };
 
 #endif /* MANAGER_H_ */

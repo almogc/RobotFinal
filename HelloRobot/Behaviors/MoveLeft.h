@@ -9,13 +9,14 @@
 #define MOVELEFT_H_
 
 #include "Behavior.h"
+#include "../Globals.h"
 
 class MoveLeft:public Behavior {
 public:
 	MoveLeft(Robot* robot);
 	bool startCond();
 		bool stopCond();
-		void doAction();
+		void doAction(Location waypoint);
 	virtual ~MoveLeft();
 };
 

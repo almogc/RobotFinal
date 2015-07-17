@@ -10,7 +10,7 @@
 
 using namespace std;
 
-void WayPointsManager::createWaypoints(string route, Location* arr)
+void WayPointsManager::createWaypoints(string route, Location* &arr)
 {
 // berman
 	ConfigurationMGR *pntConfiguration;

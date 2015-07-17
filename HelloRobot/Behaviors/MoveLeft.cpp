@@ -45,6 +45,6 @@ bool MoveLeft::stopCond() {
 	return true;
 }
 
-void MoveLeft::doAction() {
+void MoveLeft::doAction(Location waypoint) {
 	_robot->setSpeed(0.0,0.5);
 }

@@ -9,7 +9,7 @@
 #include "Behaviors/MoveForward.h"
 #include "Behaviors/MoveRight.h"
 #include "Behaviors/MoveLeft.h"
-#include "math.h"
+
 
 Manager::Manager(Robot* robot) {
 	_robot = robot;
@@ -30,7 +30,14 @@ Manager::Manager(Robot* robot) {
 
 }
 
-void Manager::Start(){
+
+
+
+
+
+
+
+void Manager::Start(Location* arr){
 		_robot->read();
 		_robot->read();
 		_robot->read();
@@ -41,17 +48,17 @@ void Manager::Start(){
 		double oldX = 0;
 		double oldY = 0;
 		double oldYaw = 0;
+		int i=0;
 
-
-
-
-
-		while (_currBehavior != 0)
+		while ((_currBehavior != 0) && i < 23)
 		{
 			while(!_currBehavior->stopCond())
 			{
-				_currBehavior->doAction();
+				_currBehavior->doAction(arr[i]);
 				_robot->read();
+				_robot->read();
+
+				i++;
 
 				currX = _robot->getXPos();
 				currY = _robot->getYPos();
@@ -59,16 +66,9 @@ void Manager::Start(){
 
 
 
-				double distance = sqrt(pow(currX - oldX, 2) + pow(currY - oldY, 2));
-				double radYaw = (currYaw - oldYaw) / 180.0 * M_PI;
-
-				double locationX = (cos(radYaw) * distance);
-				double locationY = (sin(radYaw) * distance);
-
-
 
 				// printing robot's location
-				//cout << "Robot location: " << currX << ", " << currY << ", " << currYaw << endl;
+				cout << "Robot location: " << currX << ", " << currY << ", " << currYaw << endl;
 
 				// Updating particles and printing the map
 

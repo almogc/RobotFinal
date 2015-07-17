@@ -11,6 +11,9 @@
 #include <iostream>
 #include <fstream>
 #include "Particle.h"
+#include "Manager.h"
+#include "WaypointsManager.h"
+#include "Globals.h"
 
 using namespace std;
 
@@ -58,8 +61,18 @@ int main() {
 	WayPointsManager waypoint;
 	waypoint.createWaypoints(route, locations);
 
-	Manager
+	Robot robot("10.10.245.65",6665);
+	//Manager m(&robot);
+	//m.Start(locations);
 
+	//robot.ChangeYawRobot(&robot,3.15);
+	//robot.ChangeYawRobot(&robot,1.57);
+	//robot.ChangeYawRobot(&robot,4.71);
+	//robot.Drive(&robot,1);
+	//robot.read();
+	//cout << robot.getXPos() << endl;
+	//cout << robot.getYPos() << endl;
+	robot.Drive(&robot,0.5);
 
 
 //	PlayerClient pc("localhost", 6665);

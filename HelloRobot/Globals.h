@@ -2,14 +2,14 @@
 #define GLOBALS_H_
 
 struct Location {
-		  int Xpos;
-		  int Ypos;
-		  int Yaw;;
+		  double Xpos;
+		  double Ypos;
+		  double Yaw;;
 		} ;
 struct StartLocationType {
-		  int Xpos;
-		  int Ypos;
-		  int Yaw;;
+		  double Xpos;
+		  double Ypos;
+		  double Yaw;;
 		} ;
 struct GoalLocationType {
 		int Xpos;

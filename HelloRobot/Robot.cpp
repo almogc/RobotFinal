@@ -6,6 +6,7 @@
  */
 
 #include "Robot.h"
+#include "ConfigurationManager.h"
 
 using namespace std;
 
@@ -15,10 +16,20 @@ Robot::Robot(char* ip, int port){
 	_pp = new Position2dProxy(_pc);
 	_lp = new LaserProxy(_pc);
 
+	ConfigurationMGR *pntConfiguration;
+	pntConfiguration = pntConfiguration->getInstance();
+
+
 	_pp->SetMotorEnable(true);
+
 	int i;
 	for(i=0;i<15;i++)
 		_pc->Read();
+
+
+	_pp->SetOdometry(pntConfiguration->StartLocation.Xpos/10,
+							pntConfiguration->StartLocation.Ypos/10,
+							pntConfiguration->StartLocation.Yaw/180 * M_PI);
 }
 void Robot::read()
 {
@@ -51,11 +62,42 @@ double Robot::getYaw()
 
 void Robot::ChangeYawRobot(Robot* robot,double dYaw)
 {
-	for(int i=1; i<10;i++)
+	robot->read();
+	double currYaw = robot->getYaw();
+	double absOffsetOne;
+
+	int side = 0;
+
+	absOffsetOne = currYaw - dYaw;
+	if(absOffsetOne < 0)
+	{
+		absOffsetOne += M_PI*2;
+	}
+
+	if(absOffsetOne < M_PI)
+	{
+		side = -1;
+	}
+	else
+	{
+		side = 1;
+	}
+
+
+
+	while(true)
+	{
+		robot->read();
+		currYaw = robot->getYaw();
+		robot->setSpeed(0.0,0.25*side);
+
+		if(currYaw > dYaw - 0.06 && currYaw < dYaw + 0.06)
 		{
-			robot->read();
-			robot->setSpeed(0.0, dYaw);
+			break;
 		}
+
+	}
+
 }
 
 void Robot::ChangeDegreeRobot(Robot* robot,double dDegree)
@@ -69,11 +111,26 @@ void Robot::ChangeDegreeRobot(Robot* robot,double dDegree)
 
 void Robot::Drive(Robot* robot,double dCm)
 {
-	for(int i=1; i<10;i++)
-		{
-			robot->read();
-			robot->setSpeed(dCm, 0.0);
-		}
+	robot->read();
+	double radYaw = robot->getYaw();
+	double locationX = robot->getXPos();
+	double locationY = robot->getYPos();
+
+	locationX += (cos(radYaw) * dCm);
+	locationY += (sin(radYaw) * dCm);
+
+	double currX = robot->getXPos();
+	double currY = robot->getYPos();
+
+	while(currX < locationX + 0.1)
+	{
+		robot->read();
+		robot->setSpeed(0.15, 0.0);
+		 currX = robot->getXPos();
+		 currY = robot->getYPos();
+		 cout << currX << endl;
+	}
+	//robot->setSpeed(0.0,0.0);
 }
 
 

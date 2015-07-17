@@ -7,6 +7,7 @@
 
 #include "MoveRight.h"
 
+
 MoveRight::MoveRight(Robot* robot) :
 	Behavior(robot) {
 }
@@ -44,6 +45,6 @@ bool MoveRight::stopCond() {
 	return true;
 }
 
-void MoveRight::doAction() {
+void MoveRight::doAction(Location waypoint) {
 	_robot->setSpeed(0.0, -0.3);
 }

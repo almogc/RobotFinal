@@ -9,6 +9,7 @@
 #define BEHAVIOR_H_
 
 #include "../Robot.h"
+#include "../Globals.h"
 
 class Behavior {
 public:
@@ -20,7 +21,7 @@ public:
 		Behavior(Robot* robot);
 		virtual bool startCond() = 0;
 		virtual bool stopCond() = 0;
-		virtual void doAction() = 0;
+		virtual void doAction(Location wayPoint) = 0;
 		Behavior* addNext(Behavior* beh);
 		Behavior* selectNext();
 		virtual ~Behavior();
