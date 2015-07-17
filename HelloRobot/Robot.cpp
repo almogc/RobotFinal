@@ -49,6 +49,34 @@ double Robot::getYaw()
 	return _pp->GetYaw();
 }
 
+void Robot::ChangeYawRobot(Robot* robot,double dYaw)
+{
+	for(int i=1; i<10;i++)
+		{
+			robot->read();
+			robot->setSpeed(0.0, dYaw);
+		}
+}
+
+void Robot::ChangeDegreeRobot(Robot* robot,double dDegree)
+{
+	for(int i=1; i<20;i++)
+		{
+			robot->read();
+			robot->setSpeed(0.0, (dDegree / 180) * M_PI);
+		}
+}
+
+void Robot::Drive(Robot* robot,double dCm)
+{
+	for(int i=1; i<10;i++)
+		{
+			robot->read();
+			robot->setSpeed(dCm, 0.0);
+		}
+}
+
+
 Robot::~Robot() {
 delete _pc;
 delete _pp;

@@ -26,6 +26,10 @@ public:
 	double getYPos();
 	double getYaw();
 	virtual ~Robot();
+	static void ChangeYawRobot(Robot* robot,double dYaw);
+	static void ChangeDegreeRobot(Robot* robot,double dDegree);
+	static void Drive(Robot* robot,double dCm);
+
 };
 
 #endif /* ROBOT_H_ */
