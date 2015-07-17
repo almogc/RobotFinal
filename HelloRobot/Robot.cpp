@@ -21,15 +21,16 @@ Robot::Robot(char* ip, int port){
 
 
 	_pp->SetMotorEnable(true);
+	_pp->SetOdometry(pntConfiguration->StartLocation.Xpos/10,
+								pntConfiguration->StartLocation.Ypos/10,
+								pntConfiguration->StartLocation.Yaw/180 * M_PI);
 
 	int i;
 	for(i=0;i<15;i++)
 		_pc->Read();
 
 
-	_pp->SetOdometry(pntConfiguration->StartLocation.Xpos/10,
-							pntConfiguration->StartLocation.Ypos/10,
-							pntConfiguration->StartLocation.Yaw/180 * M_PI);
+
 }
 void Robot::read()
 {
@@ -100,6 +101,52 @@ void Robot::ChangeYawRobot(Robot* robot,double dYaw)
 
 }
 
+void Robot::ChangeYawRobotPlayer(Robot* robot,double dYaw)
+{
+	robot->read();
+	double currYaw = robot->getYaw();
+	currYaw += M_PI;
+	double absOffsetOne;
+
+	int side = 0;
+
+	absOffsetOne = currYaw - dYaw;
+	if(absOffsetOne < 0)
+	{
+		absOffsetOne += M_PI*2;
+	}
+
+	if(absOffsetOne < M_PI)
+	{
+		side = -1;
+	}
+	else
+	{
+		side = 1;
+	}
+
+
+
+	while(true)
+	{
+		robot->read();
+		currYaw = robot->getYaw();
+		currYaw += M_PI;
+		robot->setSpeed(0.0,0.25*side);
+
+		if(currYaw > dYaw - 0.06 && currYaw < dYaw + 0.06)
+		{
+			break;
+		}
+
+	}
+
+}
+
+
+
+
+
 void Robot::ChangeDegreeRobot(Robot* robot,double dDegree)
 {
 	for(int i=1; i<20;i++)
@@ -122,8 +169,14 @@ void Robot::Drive(Robot* robot,double dCm)
 	double currX = robot->getXPos();
 	double currY = robot->getYPos();
 
-	while(currX < locationX + 0.1)
+	while(true)
 	{
+		if((currX > locationX - 0.2 && currX < locationX + 0.2)&&
+				(currY > locationY- 0.2 && currX < locationX + 0.2))
+		{
+			break;
+		}
+
 		robot->read();
 		robot->setSpeed(0.15, 0.0);
 		 currX = robot->getXPos();

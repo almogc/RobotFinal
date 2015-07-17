@@ -62,8 +62,8 @@ int main() {
 	waypoint.createWaypoints(route, locations);
 
 	Robot robot("10.10.245.65",6665);
-	//Manager m(&robot);
-	//m.Start(locations);
+	Manager m(&robot);
+	m.Start(locations);
 
 	//robot.ChangeYawRobot(&robot,3.15);
 	//robot.ChangeYawRobot(&robot,1.57);
@@ -72,7 +72,7 @@ int main() {
 	//robot.read();
 	//cout << robot.getXPos() << endl;
 	//cout << robot.getYPos() << endl;
-	robot.Drive(&robot,0.5);
+	//robot.Drive(&robot,0.5);
 
 
 //	PlayerClient pc("localhost", 6665);
