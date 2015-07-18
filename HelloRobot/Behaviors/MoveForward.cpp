@@ -51,10 +51,6 @@ void MoveForward::doAction(Location waypoint) {
 	double deltaX = 0;
 	double deltaY = 0;
 
-	double oldX = 0;
-	double oldY = 0;
-	double oldYaw = _robot->getYaw();
-
 
 	currX = _robot->getXPos() - _robot->robotStartX;
 	currY =_robot->getYPos() - _robot->robotStartY;
@@ -81,7 +77,7 @@ void MoveForward::doAction(Location waypoint) {
   	_robot->ChangeYawRobot(_robot,currYaw);
  	_robot->Drive(_robot,distance);
 
- 	Particle
+
 
 	//	double radYaw = 20 / 180.0 * M_PI;
 
