@@ -47,9 +47,7 @@ void MoveForward::doAction(Location waypoint) {
 	double currX;
 	double currY;
 	double currYaw;
-	double startX = 90;
-	double startY = 76;
-	double startYaw = 20;
+
 	double deltaX = 0;
 	double deltaY = 0;
 
@@ -58,22 +56,32 @@ void MoveForward::doAction(Location waypoint) {
 	double oldYaw = _robot->getYaw();
 
 
-	currX = _robot->getXPos();
-	currY =_robot->getYPos();
-//	currYaw = _robotd->getYaw();
+	currX = _robot->getXPos() - _robot->robotStartX;
+	currY =_robot->getYPos() - _robot->robotStartY;
+
+
 
 	deltaX = currX - waypoint.Xpos/10;
-	deltaY = currY - waypoint.Ypos/10;
+	deltaY = waypoint.Ypos/10 - currY;
 
 
 	double distance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
 
 
-	currYaw = atan(deltaX/deltaY);
+	currYaw = (atan(deltaX/deltaY) + 1.57);
+	if (currYaw >= 2*M_PI)
+	{
+		currYaw -= 2*M_PI;
+	}
+
+
+
   	cout <<  " yaw " << currYaw << endl;
 
   	_robot->ChangeYawRobot(_robot,currYaw);
-  	//_robot->Drive(_robot,distance);
+ 	_robot->Drive(_robot,distance);
+
+ 	Particle
 
 	//	double radYaw = 20 / 180.0 * M_PI;
 

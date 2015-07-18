@@ -19,17 +19,21 @@ Robot::Robot(char* ip, int port){
 	ConfigurationMGR *pntConfiguration;
 	pntConfiguration = pntConfiguration->getInstance();
 
-
 	_pp->SetMotorEnable(true);
+
 	_pp->SetOdometry(pntConfiguration->StartLocation.Xpos/10,
-								pntConfiguration->StartLocation.Ypos/10,
-								pntConfiguration->StartLocation.Yaw/180 * M_PI);
+			pntConfiguration->StartLocation.Ypos/10,
+			pntConfiguration->StartLocation.Yaw/180*M_PI);
+
+
+
 
 	int i;
 	for(i=0;i<15;i++)
 		_pc->Read();
 
-
+	robotStartX = getXPos();
+	robotStartY = getYPos();
 
 }
 void Robot::read()
@@ -136,6 +140,7 @@ void Robot::ChangeYawRobotPlayer(Robot* robot,double dYaw)
 
 		if(currYaw > dYaw - 0.06 && currYaw < dYaw + 0.06)
 		{
+			robot->setSpeed(0.0,0.0);
 			break;
 		}
 
@@ -171,9 +176,10 @@ void Robot::Drive(Robot* robot,double dCm)
 
 	while(true)
 	{
-		if((currX > locationX - 0.2 && currX < locationX + 0.2)&&
-				(currY > locationY- 0.2 && currX < locationX + 0.2))
+		if((currX > locationX - 0.05 && currX < locationX + 0.05)&&
+				(currY > locationY- 0.05 && currX < locationX + 0.05))
 		{
+			robot->setSpeed(0.0,0.0);
 			break;
 		}
 
@@ -183,7 +189,7 @@ void Robot::Drive(Robot* robot,double dCm)
 		 currY = robot->getYPos();
 		 cout << currX << endl;
 	}
-	//robot->setSpeed(0.0,0.0);
+
 }
 
 

@@ -50,8 +50,13 @@ void Manager::Start(Location* arr){
 		double oldYaw = 0;
 		int i=0;
 
-		while ((_currBehavior != 0) && i < 23)
+		while ((_currBehavior != 0))
 		{
+			if(arr[i].Xpos == 0)
+			{
+				break;
+			}
+
 			while(!_currBehavior->stopCond())
 			{
 				_currBehavior->doAction(arr[i]);

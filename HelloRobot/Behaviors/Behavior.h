@@ -15,6 +15,7 @@ class Behavior {
 public:
 	Behavior** _next;
 		int _behaviorsCount;
+
 	protected:
 		Robot* _robot;
 	public:

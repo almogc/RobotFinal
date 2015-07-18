@@ -18,6 +18,8 @@ class Robot {
 	Position2dProxy* _pp;
 	LaserProxy* _lp;
 public:
+	double robotStartX = 0;
+	double robotStartY = 0;
 	Robot(char* ip, int port);
 	void read();
 	void setSpeed(float speed, float angularSpeed);

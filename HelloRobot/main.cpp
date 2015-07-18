@@ -61,7 +61,7 @@ int main() {
 	WayPointsManager waypoint;
 	waypoint.createWaypoints(route, locations);
 
-	Robot robot("10.10.245.65",6665);
+	Robot robot("localhost",6665);
 	Manager m(&robot);
 	m.Start(locations);
 

@@ -13,6 +13,7 @@
 
 class MoveForward: public Behavior {
 public:
+
 	MoveForward(Robot* robot);
 	bool startCond();
 	bool stopCond();
