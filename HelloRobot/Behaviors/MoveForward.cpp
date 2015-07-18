@@ -47,47 +47,28 @@ void MoveForward::doAction(Location waypoint) {
 	double currX;
 	double currY;
 	double currYaw;
-
 	double deltaX = 0;
 	double deltaY = 0;
 
-
+	// get the position from the robot and subs the start position to check the delta
 	currX = _robot->getXPos() - _robot->robotStartX;
 	currY =_robot->getYPos() - _robot->robotStartY;
 
-
-
+	// calculate the delta we have to do in each coordinate until the next waypoint
 	deltaX = currX - waypoint.Xpos/10;
 	deltaY = waypoint.Ypos/10 - currY;
 
-
+	// calculate the distance and the angel we need
 	double distance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
-
-
 	currYaw = (atan(deltaX/deltaY) + 1.57);
+
 	if (currYaw >= 2*M_PI)
 	{
 		currYaw -= 2*M_PI;
 	}
 
-
-
-  	cout <<  " yaw " << currYaw << endl;
-
   	_robot->ChangeYawRobot(_robot,currYaw);
  	_robot->Drive(_robot,distance);
-
-
-
-	//	double radYaw = 20 / 180.0 * M_PI;
-
-	//double locationX = (cos(radYaw) * distance);
-	//double locationY = (sin(radYaw) * distance);
-
-
-
-
-
 
 }
 

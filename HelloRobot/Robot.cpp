@@ -108,6 +108,7 @@ void Robot::ChangeYawRobot(Robot* robot,double dYaw)
 void Robot::ChangeYawRobotPlayer(Robot* robot,double dYaw)
 {
 	robot->read();
+
 	double currYaw = robot->getYaw();
 	currYaw += M_PI;
 	double absOffsetOne;
@@ -148,34 +149,24 @@ void Robot::ChangeYawRobotPlayer(Robot* robot,double dYaw)
 
 }
 
-
-
-
-
-void Robot::ChangeDegreeRobot(Robot* robot,double dDegree)
-{
-	for(int i=1; i<20;i++)
-		{
-			robot->read();
-			robot->setSpeed(0.0, (dDegree / 180) * M_PI);
-		}
-}
-
 void Robot::Drive(Robot* robot,double dCm)
 {
+	// Get the current position from the robot
 	robot->read();
 	double radYaw = robot->getYaw();
 	double locationX = robot->getXPos();
 	double locationY = robot->getYPos();
 
-	locationX += (cos(radYaw) * dCm);
-	locationY += (sin(radYaw) * dCm);
+	// calculate the place where we should be after the drive
+	locationX += (cos(radYaw) * dCm + 0.03);
+	locationY += (sin(radYaw) * dCm + 0.03);
 
 	double currX = robot->getXPos();
 	double currY = robot->getYPos();
 
 	while(true)
 	{
+		// checking if the robot is arrived to the wanted location
 		if((currX > locationX - 0.05 && currX < locationX + 0.05)&&
 				(currY > locationY- 0.05 && currX < locationX + 0.05))
 		{
@@ -183,13 +174,11 @@ void Robot::Drive(Robot* robot,double dCm)
 			break;
 		}
 
-		robot->read();
 		robot->setSpeed(0.15, 0.0);
-		 currX = robot->getXPos();
-		 currY = robot->getYPos();
-		 cout << currX << endl;
+		robot->read();
+		currX = robot->getXPos();
+		currY = robot->getYPos();
 	}
-
 }
 
 
