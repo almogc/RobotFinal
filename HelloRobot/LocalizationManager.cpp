@@ -6,6 +6,18 @@
 using namespace std;
 
 
+LocalizationManager*  LocalizationManager::localObject = 0;
+
+LocalizationManager* LocalizationManager::getInstance()
+{
+	if (!localObject){
+
+		localObject = new LocalizationManager();
+	}
+	return localObject;
+}
+
+
 void LocalizationManager::initParticle(double dStartY, double dStartX, int** GridMap, int nGridWidth, int nGridHight)
 {
 	for (int i = 0; i < PARTICLE_NUM; i++)
@@ -42,9 +54,9 @@ Location LocalizationManager::GetHigeBel()
 {
 	Location rLocation;
 	int nMax=-999;
+
 	for (int i = 0; i < PARTICLE_NUM; i++)
 		{
-
 			if(arr_particles[i]->getBelief() > nMax)
 			{
 				nMax = arr_particles[i]->getBelief();
@@ -52,8 +64,6 @@ Location LocalizationManager::GetHigeBel()
 				rLocation.Ypos = arr_particles[i]->getY();
 				rLocation.Ypos = arr_particles[i]->getYaw();
 			}
-
-
 		}
 
 		return (rLocation);
