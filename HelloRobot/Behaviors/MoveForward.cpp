@@ -7,6 +7,8 @@
 
 #include "MoveForward.h"
 #include "math.h"
+#include "../ConfigurationManager.h"
+#include "../LocalizationManager.h"
 
 MoveForward::MoveForward(Robot* robot) :Behavior(robot){
 
@@ -42,6 +44,13 @@ bool MoveForward::stopCond() {
 
 void MoveForward::doAction(Location waypoint) {
 
+	LocalizationManager *local;
+	local = local->getInstance();
+
+	ConfigurationMGR *pntConfiguration;
+		pntConfiguration = pntConfiguration->getInstance();
+
+
 	for (int i=0; i<5 ; i++)
 	{
 		_robot->read();
@@ -57,9 +66,16 @@ void MoveForward::doAction(Location waypoint) {
 	currX = _robot->getXPos() - _robot->robotStartX;
 	currY =_robot->getYPos() - _robot->robotStartY;
 
+
+	local->getInstance()->initParticle(int(currX*10 + pntConfiguration->StartLocation.Xpos),
+										int(currY*10 + pntConfiguration->StartLocation.Ypos));
+
+
 	// calculate the delta we have to do in each coordinate until the next waypoint
 	deltaX = waypoint.Xpos/10 - currX;
 	deltaY = waypoint.Ypos/10 - currY;
+
+
 
 	// calculate the distance and the angel we need
 	double distance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
@@ -101,10 +117,16 @@ void MoveForward::doAction(Location waypoint) {
 		currYaw += 2*M_PI;
 	}
 
+	local->getInstance()->UpdateBel(deltaX*10,deltaY*10,currYaw,_robot);
+	Location loc;
+	loc = local->getInstance()->GetHigeBel();
+
 
 	cout << "Yaw : " << currYaw << " distance: " << distance << endl;
   	_robot->ChangeYawRobot(_robot,currYaw);
  	_robot->Drive(_robot,distance);
+
+
 
 }
 

@@ -17,8 +17,15 @@ LocalizationManager* LocalizationManager::getInstance()
 	return localObject;
 }
 
+void LocalizationManager::SetGrid(int** setGridMap,int setGridWidth,int setGridHight)
 
-void LocalizationManager::initParticle(double dStartY, double dStartX, int** GridMap, int nGridWidth, int nGridHight)
+{
+	GridMap = setGridMap;
+	nGridWidth = setGridWidth;
+	nGridHight = setGridHight;
+}
+
+void LocalizationManager::initParticle(double dStartY, double dStartX)
 {
 	for (int i = 0; i < PARTICLE_NUM; i++)
 				{
@@ -53,7 +60,7 @@ void LocalizationManager::UpdateBel(double DeltaX, double DeltaY, double Yaw, Ro
 Location LocalizationManager::GetHigeBel()
 {
 	Location rLocation;
-	int nMax=-999;
+	double nMax=-999;
 
 	for (int i = 0; i < PARTICLE_NUM; i++)
 		{
@@ -62,7 +69,7 @@ Location LocalizationManager::GetHigeBel()
 				nMax = arr_particles[i]->getBelief();
 				rLocation.Xpos = arr_particles[i]->getX();
 				rLocation.Ypos = arr_particles[i]->getY();
-				rLocation.Ypos = arr_particles[i]->getYaw();
+				rLocation.Yaw = arr_particles[i]->getYaw();
 			}
 		}
 

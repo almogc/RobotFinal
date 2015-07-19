@@ -20,7 +20,7 @@ Particle::~Particle()
 void Particle::UpdateParticle(double deltaX, double deltaY, double deltaYaw, Robot* robot)
 {
 	double distance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
-	double radYaw = (deltaYaw + _yaw) / 180.0 * M_PI;
+	double radYaw = (deltaYaw + _yaw);
 
 	// Update robot location
 	_locationX += (cos(radYaw) * distance);

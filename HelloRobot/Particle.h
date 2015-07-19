@@ -1,6 +1,13 @@
 /*
  * Particle.h
- */
+
+
+*/
+
+#ifndef PARTICLE_H_
+#define PARTICLE_H_
+
+
 #include "Map.h"
 #include "Robot.h"
 
@@ -34,3 +41,5 @@ class Particle{
 		void SetValFromRealLocation(double x, double y, int value);
 
 };
+
+#endif

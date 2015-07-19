@@ -14,6 +14,7 @@
 #include "Manager.h"
 #include "WaypointsManager.h"
 #include "Globals.h"
+#include "LocalizationManager.h"
 
 using namespace std;
 
@@ -61,7 +62,12 @@ int main() {
 	WayPointsManager waypoint;
 	waypoint.createWaypoints(route, locations);
 
-	Robot robot("localhost",6665);
+
+	LocalizationManager *local;
+	local = local->getInstance();
+	local->getInstance()->SetGrid(GridMap, nGridWidth, nGridHight);
+
+	Robot robot("10.10.245.65",6665);
 	Manager m(&robot);
 	m.Start(locations);
 
