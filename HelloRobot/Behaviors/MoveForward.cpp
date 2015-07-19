@@ -44,8 +44,8 @@ bool MoveForward::stopCond() {
 
 void MoveForward::doAction(Location waypoint) {
 
-	LocalizationManager *local;
-	local = local->getInstance();
+	//LocalizationManager *local;
+//	local = local->getInstance();
 
 	ConfigurationMGR *pntConfiguration;
 		pntConfiguration = pntConfiguration->getInstance();
@@ -67,8 +67,8 @@ void MoveForward::doAction(Location waypoint) {
 	currY =_robot->getYPos() - _robot->robotStartY;
 
 
-	local->getInstance()->initParticle(int(currX*10 + pntConfiguration->StartLocation.Xpos),
-										int(currY*10 + pntConfiguration->StartLocation.Ypos));
+//	local->getInstance()->initParticle(int(currX*10 + pntConfiguration->StartLocation.Xpos),
+	//							int(currY*10 + pntConfiguration->StartLocation.Ypos));
 
 
 	// calculate the delta we have to do in each coordinate until the next waypoint
@@ -117,9 +117,9 @@ void MoveForward::doAction(Location waypoint) {
 		currYaw += 2*M_PI;
 	}
 
-	local->getInstance()->UpdateBel(deltaX*10,deltaY*10,currYaw,_robot);
-	Location loc;
-	loc = local->getInstance()->GetHigeBel();
+//	local->getInstance()->UpdateBel(deltaX*10,deltaY*10,currYaw,_robot);
+//	Location loc;
+//	loc = local->getInstance()->GetHigeBel();
 
 
 	cout << "Yaw : " << currYaw << " distance: " << distance << endl;
