@@ -130,7 +130,7 @@ void Map::MakeGridFromImage(int **&GridMap, int *nGridWidth, int *nGridHight)
 	lodeImage(pntConfiguration->mapLocation.c_str());
 
 	// Callculate how many pixel needs to be blow depending on the size of the robot
-	CellsToBlow = (pntConfiguration->RobotSize / 2) / (pntConfiguration->MapResolutionCM) + 3;
+	CellsToBlow = (pntConfiguration->RobotSize / 2) / (pntConfiguration->MapResolutionCM) + 4;
 
 	// Running over all the png map and blow it
 	for (unsigned int nRow = 0; nRow < nHeight; nRow += 1)

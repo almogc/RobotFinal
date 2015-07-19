@@ -107,7 +107,7 @@ void Robot::ChangeYawRobot(Robot* robot,double dYaw)
 		currYaw = robot->getYaw();
 		robot->setSpeed(0.0,0.2*side);
 
-		if(currYaw > dYaw - 0.06 && currYaw < dYaw + 0.06)
+		if(currYaw > dYaw - 0.07 && currYaw < dYaw + 0.07)
 		{
 			break;
 		}
