@@ -30,13 +30,6 @@ Manager::Manager(Robot* robot) {
 
 }
 
-
-
-
-
-
-
-
 void Manager::Start(Location* arr){
 		_robot->read();
 		_robot->read();
@@ -68,9 +61,6 @@ void Manager::Start(Location* arr){
 				currX = _robot->getXPos();
 				currY = _robot->getYPos();
 				currYaw = _robot->getYaw();
-
-
-
 
 				// printing robot's location
 				cout << "Robot location: " << currX << ", " << currY << ", " << currYaw << endl;

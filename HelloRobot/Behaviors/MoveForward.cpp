@@ -42,7 +42,10 @@ bool MoveForward::stopCond() {
 
 void MoveForward::doAction(Location waypoint) {
 
-	_robot->read();
+	for (int i=0; i<5 ; i++)
+	{
+		_robot->read();
+	}
 
 	double currX;
 	double currY;
@@ -55,18 +58,51 @@ void MoveForward::doAction(Location waypoint) {
 	currY =_robot->getYPos() - _robot->robotStartY;
 
 	// calculate the delta we have to do in each coordinate until the next waypoint
-	deltaX = currX - waypoint.Xpos/10;
+	deltaX = waypoint.Xpos/10 - currX;
 	deltaY = waypoint.Ypos/10 - currY;
 
 	// calculate the distance and the angel we need
 	double distance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
-	currYaw = (atan(deltaX/deltaY) + 1.57);
+	currYaw = atan(abs(deltaX/deltaY));
+
+	if(deltaX <= 0)
+	{
+		if(deltaY <=0)
+		{
+			currYaw = M_PI - currYaw;
+		}
+		else
+		{
+
+		}
+	}
+	else
+	{
+		if(deltaY <=0)
+		{
+			currYaw += M_PI;
+		}
+		else
+		{
+			currYaw = 2*M_PI -currYaw;
+		}
+	}
+
+
+	currYaw += 1.57;
 
 	if (currYaw >= 2*M_PI)
 	{
 		currYaw -= 2*M_PI;
 	}
 
+	if(currYaw < 0)
+	{
+		currYaw += 2*M_PI;
+	}
+
+
+	cout << "Yaw : " << currYaw << " distance: " << distance << endl;
   	_robot->ChangeYawRobot(_robot,currYaw);
  	_robot->Drive(_robot,distance);
 

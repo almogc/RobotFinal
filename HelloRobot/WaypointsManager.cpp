@@ -40,7 +40,7 @@ void WayPointsManager::createWaypoints(string route, Location* &arr)
 					direction = c-'0';
 
 					// if the pint is the continue of the way, don't create a waypoint
-					if((counter == 0) || (lastDirection == direction && counter < 5))
+					if(counter == 0 || (lastDirection == direction && counter < 5))
 					{
 						counter ++;
 					}
