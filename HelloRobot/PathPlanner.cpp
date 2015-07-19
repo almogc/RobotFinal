@@ -42,7 +42,6 @@ class Node
         // give better priority to going strait instead of diagonally
         void nextLevel(const int & i) // i: direction
         {
-             //level+=(dirNum==8?(i%2==0?10:14):10);
              if (i % 2 == 0)
              {
             	 level += 10;

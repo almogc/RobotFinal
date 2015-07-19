@@ -67,7 +67,8 @@ int main() {
 	local = local->getInstance();
 	local->getInstance()->SetGrid(GridMap, nGridWidth, nGridHight);
 
-	Robot robot("localhost",6665);
+	Robot robot("10.10.245.65",6665);
+//robot.Drive(&robot,0.4);
 	Manager m(&robot);
 	m.Start(locations);
 
