@@ -42,24 +42,32 @@ class Node
         // give better priority to going strait instead of diagonally
         void nextLevel(const int & i) // i: direction
         {
-             level+=(dirNum==8?(i%2==0?10:14):10);
+             //level+=(dirNum==8?(i%2==0?10:14):10);
+             if (i % 2 == 0)
+             {
+            	 level += 10;
+
+             }else
+             {
+            	 level += 14;
+             }
         }
 
-        // Estimation function for the remaining distance to the goal.
+        // Estimation function for the remaining distance to the goal
         const int & estimate(const int & xDest, const int & yDest) const
         {
-            static int xd, yd, d;
+            static int xd, yd, dist;
             xd=xDest-xPos;
             yd=yDest-yPos;
 
             //Distance
-            d=static_cast<int>(sqrt(xd*xd+yd*yd));
+            dist=static_cast<int>(sqrt(xd*xd+yd*yd));
 
-            return(d);
+            return(dist);
         }
 };
 
-// Determine priority (in the priority queue)
+// Determine priority
 bool operator<(const Node & nodeA, const Node & nodeB)
 {
   return nodeA.getPriority() > nodeB.getPriority();
@@ -177,15 +185,15 @@ string PathPlanner::AStarPathFind( const int nRowStart, const int nColStart,
                 ColIndex+=dirY[cellIndex];
             }
 
-            // garbage collection
+            // delete node
             delete nNodeA;
 
-            // empty the leftover nodes
+            // delete all left nodes
             while(!prior_queue[pqIndex].empty()) prior_queue[pqIndex].pop();
             return path;
         }
 
-        // generate moves (child nodes) in all possible directions
+        // generate moves possible moves
         for(dirIndex=0;dirIndex<dirNum;dirIndex++)
         {
             xdx=RowIndex+dirX[dirIndex];
